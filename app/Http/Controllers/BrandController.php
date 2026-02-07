@@ -14,7 +14,12 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::latest('id')->paginate(10);
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $brands = Brand::where('user_id', auth()->id())->latest('id')->paginate(10);
+        } else {
+            $brands = Brand::latest('id')->paginate(10);
+        }
         return view('backend.brand.index', compact('brands'));
     }
 
@@ -42,8 +47,8 @@ class BrandController extends Controller
         ]);
 
         $slug = generateUniqueSlug($request->title, Brand::class);
-
         $validatedData['slug'] = $slug;
+        $validatedData['user_id'] = auth()->id();
 
         $brand = Brand::create($validatedData);
 

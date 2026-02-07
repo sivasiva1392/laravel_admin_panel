@@ -18,7 +18,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::getAllProduct();
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $products = Product::where('user_id', auth()->id())->with(['cat_info','sub_cat_info'])->orderBy('id','desc')->paginate(10);
+        } else {
+            $products = Product::getAllProduct();
+        }
         return view('backend.product.index', compact('products'));
     }
 
@@ -70,6 +75,7 @@ class ProductController extends Controller
         $slug = generateUniqueSlug($request->title, Product::class);
         $validatedData['slug'] = $slug;
         $validatedData['is_featured'] = $request->input('is_featured', 0);
+        $validatedData['user_id'] = auth()->id();
 
         if ($request->has('size')) {
             $validatedData['size'] = implode(',', $request->input('size'));
@@ -160,6 +166,14 @@ class ProductController extends Controller
         } else {
             // Keep existing photo if no new file uploaded
             $validatedData['photo'] = $product->photo;
+        }
+
+        if ((auth()->user()->hasRole('admin') || auth()->user()->hasRole('master')) && isset($validatedData['added_by'])) {
+            // Admin or master can assign to any user
+            $validatedData['user_id'] = $validatedData['added_by'];
+        } else {
+            // Regular users can only create for themselves
+            $validatedData['user_id'] = auth()->id();
         }
 
         if ($request->has('size')) {

@@ -14,7 +14,12 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::getAllCategory();
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $categories = Category::where('user_id', auth()->id())->orderBy('id','DESC')->with('parent_info')->paginate(10);
+        } else {
+            $categories = Category::getAllCategory();
+        }
         return view('backend.category.index', compact('categories'));
     }
 
@@ -57,6 +62,8 @@ class CategoryController extends Controller
         $slug = generateUniqueSlug($request->title, Category::class);
         $validatedData['slug'] = $slug;
         $validatedData['is_parent'] = $request->input('is_parent', 0);
+        $validatedData['user_id'] = auth()->id();
+        $validatedData['added_by'] = auth()->id();
 
         $category = Category::create($validatedData);
 

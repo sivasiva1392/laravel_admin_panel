@@ -14,7 +14,12 @@ class BannerController extends Controller
      */
     public function index()
     {
-        $banners = Banner::latest('id')->paginate(10);
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $banners = Banner::where('user_id', auth()->id())->latest('id')->paginate(10);
+        } else {
+            $banners = Banner::latest('id')->paginate(10);
+        }
         return view('backend.banner.index', compact('banners'));
     }
 
@@ -53,6 +58,7 @@ class BannerController extends Controller
 
         $slug = generateUniqueSlug($request->title, Banner::class);
         $validatedData['slug'] = $slug;
+        $validatedData['user_id'] = auth()->id();
 
         $banner = Banner::create($validatedData);
 
