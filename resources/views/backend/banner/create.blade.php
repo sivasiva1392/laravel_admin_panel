@@ -59,15 +59,32 @@
 <link rel="stylesheet" href="{{asset('backend/summernote/summernote.min.css')}}">
 @endpush
 @push('scripts')
-<script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
 <script>
     $(document).ready(function() {
+        console.log('Initializing Summernote for banner...');
+        
+        // Check if summernote is loaded
+        if (typeof $.summernote === 'undefined') {
+            console.error('Summernote is not loaded!');
+            return;
+        }
+        
         $('#description').summernote({
-            placeholder: "Write short description.....",
+            placeholder: "Write banner description.....",
             tabsize: 2,
-            height: 150
+            height: 150,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'italic', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['insert', ['link', 'picture']],
+                ['view', ['fullscreen', 'codeview', 'help']]
+            ]
         });
+        
+        console.log('Banner Summernote initialized successfully!');
 
         // File preview functionality
         $('input[name="photo"]').on('change', function() {

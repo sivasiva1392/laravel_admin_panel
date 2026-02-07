@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Summernote Complete Test</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Summernote CSS -->
+    <link href="public/backend/summernote/summernote.min.css" rel="stylesheet">
+    
+    <style>
+        .test-section {
+            margin: 30px 0;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        .success { background-color: #d4edda; color: #155724; }
+        .error { background-color: #f8d7da; color: #721c24; }
+        .info { background-color: #d1ecf1; color: #0c5460; }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h1 class="text-center mb-4">Summernote Editor Complete Test</h1>
+        
+        <div class="test-section">
+            <h3>jQuery Status</h3>
+            <div id="jquery-status" class="status info">Checking...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Summernote Status</h3>
+            <div id="summernote-status" class="status info">Checking...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Editor 1 - Basic</h3>
+            <textarea id="editor1" name="editor1">Hello Summernote World!</textarea>
+            <button class="btn btn-primary mt-2" onclick="getContent1()">Get Content</button>
+            <div class="mt-3">
+                <h5>Content:</h5>
+                <div id="content1" class="border p-3 bg-light"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Test Editor 2 - Advanced</h3>
+            <textarea id="editor2" name="editor2"></textarea>
+            <button class="btn btn-primary mt-2" onclick="getContent2()">Get Content</button>
+            <div class="mt-3">
+                <h5>Content:</h5>
+                <div id="content2" class="border p-3 bg-light"></div>
+            </div>
+        </div>
+        
+        <div class="test-section">
+            <h3>Console Log</h3>
+            <div id="console-log" class="border p-3 bg-dark text-light" style="height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+            <button class="btn btn-secondary mt-2" onclick="clearLog()">Clear Log</button>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Summernote JS -->
+    <script src="public/backend/summernote/summernote.min.js"></script>
+
+    <script>
+        // Enhanced logging
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logElement = document.getElementById('console-log');
+            logElement.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logElement.scrollTop = logElement.scrollHeight;
+            console.log(message);
+        }
+        
+        function clearLog() {
+            document.getElementById('console-log').innerHTML = '';
+        }
+        
+        function updateStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status ${type}`;
+        }
+        
+        $(document).ready(function() {
+            log('Document ready, starting tests...');
+            
+            // Test jQuery
+            if (typeof $ !== 'undefined') {
+                updateStatus('jquery-status', '✓ jQuery loaded successfully', 'success');
+                log('jQuery version: ' + $.fn.jquery);
+            } else {
+                updateStatus('jquery-status', '✗ jQuery not loaded', 'error');
+                log('ERROR: jQuery not loaded!', 'error');
+                return;
+            }
+            
+            // Test Summernote
+            if (typeof $.summernote !== 'undefined') {
+                updateStatus('summernote-status', '✓ Summernote loaded successfully', 'success');
+                log('Summernote version: ' + $.summernote.version);
+                
+                // Initialize first editor
+                $('#editor1').summernote({
+                    placeholder: 'Type something here...',
+                    height: 150
+                });
+                log('Editor 1 initialized');
+                
+                // Initialize second editor with advanced options
+                $('#editor2').summernote({
+                    placeholder: 'Advanced editor with toolbar...',
+                    height: 200,
+                    toolbar: [
+                        ['style', ['style']],
+                        ['font', ['bold', 'italic', 'underline', 'clear']],
+                        ['color', ['color']],
+                        ['para', ['ul', 'ol', 'paragraph']],
+                        ['table', ['table']],
+                        ['insert', ['link', 'picture', 'video']],
+                        ['view', ['fullscreen', 'codeview', 'help']]
+                    ]
+                });
+                log('Editor 2 initialized with advanced toolbar');
+                
+                log('All Summernote tests completed successfully!');
+                
+            } else {
+                updateStatus('summernote-status', '✗ Summernote not loaded', 'error');
+                log('ERROR: Summernote not loaded!', 'error');
+            }
+        });
+        
+        function getContent1() {
+            const content = $('#editor1').summernote('code');
+            document.getElementById('content1').innerHTML = content;
+            log('Retrieved content from Editor 1');
+        }
+        
+        function getContent2() {
+            const content = $('#editor2').summernote('code');
+            document.getElementById('content2').innerHTML = content;
+            log('Retrieved content from Editor 2');
+        }
+        
+        // Error handling
+        window.onerror = function(msg, url, line, col, error) {
+            log(`ERROR: ${msg} at ${url}:${line}`, 'error');
+            return false;
+        };
+    </script>
+</body>
+</html>

@@ -31,7 +31,7 @@ class PostController extends Controller
     {
         $categories=PostCategory::get();
         $tags=PostTag::get();
-        $users=User::get();
+        $users=UserModel::get();
         return view('backend.post.create')->with('users',$users)->with('categories',$categories)->with('tags',$tags);
     }
 

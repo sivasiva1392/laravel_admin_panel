@@ -102,29 +102,64 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
 @endpush
 @push('scripts')
-<script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
     $(document).ready(function() {
+      console.log('Initializing Summernote...');
+      
+      // Check if summernote is loaded
+      if (typeof $.summernote === 'undefined') {
+        console.error('Summernote is not loaded!');
+        return;
+      }
+      
       $('#summary').summernote({
         placeholder: "Write short description.....",
-          tabsize: 2,
-          height: 100
+        tabsize: 2,
+        height: 100,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
       });
 
       $('#description').summernote({
         placeholder: "Write detail description.....",
-          tabsize: 2,
-          height: 150
+        tabsize: 2,
+        height: 150,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
       });
 
       $('#quote').summernote({
         placeholder: "Write detail Quote.....",
-          tabsize: 2,
-          height: 100
+        tabsize: 2,
+        height: 100,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['codeview', 'help']]
+        ]
       });
+      
+      console.log('Summernote initialized successfully!');
 
       // File preview functionality
       $('input[name="photo"]').on('change', function() {

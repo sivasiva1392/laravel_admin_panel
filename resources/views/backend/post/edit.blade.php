@@ -124,44 +124,78 @@
 
 @endpush
 @push('scripts')
-<script src="{{asset('backend/vendor/jquery/jquery.min.js')}}"></script>
 <script src="{{asset('backend/summernote/summernote.min.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 
 <script>
     $(document).ready(function() {
-    $('#summary').summernote({
-      placeholder: "Write short description.....",
+      console.log('Initializing Summernote for edit...');
+      
+      // Check if summernote is loaded
+      if (typeof $.summernote === 'undefined') {
+        console.error('Summernote is not loaded!');
+        return;
+      }
+      
+      $('#summary').summernote({
+        placeholder: "Write short description.....",
         tabsize: 2,
-        height: 150
-    });
+        height: 100,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
 
-    $('#quote').summernote({
-      placeholder: "Write short Quote.....",
+      $('#quote').summernote({
+        placeholder: "Write detail Quote.....",
         tabsize: 2,
-        height: 100
-    });
-    $(document).ready(function() {
+        height: 100,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'italic', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['insert', ['link']],
+          ['view', ['codeview', 'help']]
+        ]
+      });
+      
       $('#description').summernote({
         placeholder: "Write detail description.....",
-          tabsize: 2,
-          height: 150
+        tabsize: 2,
+        height: 150,
+        toolbar: [
+          ['style', ['style']],
+          ['font', ['bold', 'underline', 'clear']],
+          ['color', ['color']],
+          ['para', ['ul', 'ol', 'paragraph']],
+          ['table', ['table']],
+          ['insert', ['link', 'picture']],
+          ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+      });
+      
+      console.log('Summernote initialized successfully for edit!');
+      
+      // File preview functionality
+      $('input[name="photo"]').on('change', function() {
+          var file = this.files[0];
+          if (file) {
+              var reader = new FileReader();
+              reader.onload = function(e) {
+                  $('#uploadPreview').html('<img src="' + e.target.result + '" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;"/>');
+              };
+              reader.readAsDataURL(file);
+          } else {
+              $('#uploadPreview').html('');
+          }
       });
     });
-
-    // File preview functionality
-    $('input[name="photo"]').on('change', function() {
-        var file = this.files[0];
-        if (file) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                $('#uploadPreview').html('<img src="' + e.target.result + '" style="max-width: 200px; max-height: 100px; border: 1px solid #ddd; border-radius: 4px;"/>');
-            };
-            reader.readAsDataURL(file);
-        } else {
-            $('#uploadPreview').html('');
-        }
-    });
-  });
 </script>
 @endpush
