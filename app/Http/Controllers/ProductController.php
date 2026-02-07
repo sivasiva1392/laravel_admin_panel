@@ -164,8 +164,8 @@ class ProductController extends Controller
             $validatedData['photo'] = $product->photo;
         }
 
-        if ((auth()->user()->hasRole('admin') || auth()->user()->hasRole('master')) && isset($validatedData['added_by'])) {
-            // Admin or master can assign to any user
+        if ((auth()->user()->role_id == 1 || auth()->user()->role_id == 2) && isset($validatedData['added_by'])) {
+            // Super admin (1) or admin (2) can assign to any user
             $validatedData['user_id'] = $validatedData['added_by'];
         } else {
             // Regular users can only create for themselves

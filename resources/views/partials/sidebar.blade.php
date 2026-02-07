@@ -2,12 +2,11 @@
 <div class="sidebar">
     <div class="sidebar-header">
         <h4>{{ config('app.name', 'Admin Panel') }}</h4>
-        <p class="user-role">Role: {{ auth()->user()->role_name ?: ucfirst(auth()->user()->role) }}</p>
+        <p class="user-role">Role: {{ auth()->user()->role ? auth()->user()->role->display_name : 'User' }}</p>
     </div>
     
     <ul class="sidebar-menu">
-        @if (isAdmin())
-            <!-- Admin/Master Menu -->
+            <!-- Menu Items -->
             <li class="menu-item {{ request()->is('admin*') ? 'active' : '' }}">
                 <a href="{{ route('admin') }}">
                     <i class="fas fa-tachometer-alt"></i>
@@ -98,76 +97,17 @@
                     <span>Settings</span>
                 </a>
             </li>
-            
-        @else
-            <!-- Regular User Menu -->
-            <li class="menu-item {{ request()->is('user/dashboard') || request()->is('user/') ? 'active' : '' }}">
-                <a href="{{ route('user.dashboard') }}">
-                    <i class="fas fa-tachometer-alt"></i>
-                    <span>My Dashboard</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/banner*') ? 'active' : '' }}">
-                <a href="{{ route('banner.index') }}">
-                    <i class="fas fa-image"></i>
-                    <span>My Banners</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/brand*') ? 'active' : '' }}">
-                <a href="{{ route('brand.index') }}">
-                    <i class="fas fa-tag"></i>
-                    <span>My Brands</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/category*') ? 'active' : '' }}">
-                <a href="{{ route('category.index') }}">
-                    <i class="fas fa-folder"></i>
-                    <span>My Categories</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/product*') ? 'active' : '' }}">
-                <a href="{{ route('product.index') }}">
-                    <i class="fas fa-box"></i>
-                    <span>My Products</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/post-category*') ? 'active' : '' }}">
-                <a href="{{ route('post-category.index') }}">
-                    <i class="fas fa-folder-open"></i>
-                    <span>My Post Categories</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/post-tag*') ? 'active' : '' }}">
-                <a href="{{ route('post-tag.index') }}">
-                    <i class="fas fa-tags"></i>
-                    <span>My Post Tags</span>
-                </a>
-            </li>
-            
-            <li class="menu-item {{ request()->is('user/post*') ? 'active' : '' }}">
-                <a href="{{ route('post.index') }}">
-                    <i class="fas fa-newspaper"></i>
-                    <span>My Posts</span>
-                </a>
-            </li>
-        @endif
         
         <!-- Common Menu Items -->
         <li class="menu-item {{ request()->is(['*/profile', '*/change-password']) ? 'active' : '' }}">
-            <a href="{{ auth()->user()->role === 'admin' || auth()->user()->role === 'master' ? route('admin-profile') : route('user-profile') }}">
+            <a href="{{ route('admin-profile') }}">
                 <i class="fas fa-user"></i>
                 <span>My Profile</span>
             </a>
         </li>
         
         <li class="menu-item {{ request()->is(['*/change-password']) ? 'active' : '' }}">
-            <a href="{{ auth()->user()->role === 'admin' || auth()->user()->role === 'master' ? route('change.password.form') : route('user.change.password.form') }}">
+            <a href="{{ route('change.password.form') }}">
                 <i class="fas fa-key"></i>
                 <span>Change Password</span>
             </a>

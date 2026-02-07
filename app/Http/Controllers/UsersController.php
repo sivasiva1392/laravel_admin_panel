@@ -14,7 +14,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $users=User::orderBy('id','ASC')->paginate(10);
+        $users=User::with('role')->orderBy('id','ASC')->paginate(10);
         return view('backend.users.index')->with('users',$users);
     }
 
@@ -25,7 +25,8 @@ class UsersController extends Controller
      */
     public function create()
     {
-        return view('backend.users.create');
+        $roles = \App\Models\Role::all();
+        return view('backend.users.create')->with('roles', $roles);
     }
 
     /**
@@ -40,7 +41,7 @@ class UsersController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email',
             'password' => 'required|string|min:6|confirmed',
-            'role' => 'required|in:admin,user',
+            'role_id' => 'required|exists:roles,id',
             'status' => 'required|in:active,inactive',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
@@ -86,7 +87,8 @@ class UsersController extends Controller
     public function edit($id)
     {
         $user=User::findOrFail($id);
-        return view('backend.users.edit')->with('user',$user);
+        $roles = \App\Models\Role::all();
+        return view('backend.users.edit')->with('user',$user)->with('roles', $roles);
     }
 
     /**
@@ -103,7 +105,7 @@ class UsersController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|max:255|unique:users,email,' . $id,
-            'role' => 'required|in:admin,user',
+            'role_id' => 'required|exists:roles,id',
             'status' => 'required|in:active,inactive',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'password' => 'nullable|string|min:6|confirmed',

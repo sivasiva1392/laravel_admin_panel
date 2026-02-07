@@ -31,7 +31,7 @@
                     <div class="card-body mt-4 ml-2">
                       <h5 class="card-title text-left"><small><i class="fas fa-user"></i> {{$profile->name}}</small></h5>
                       <p class="card-text text-left"><small><i class="fas fa-envelope"></i> {{$profile->email}}</small></p>
-                      <p class="card-text text-left"><small class="text-muted"><i class="fas fa-hammer"></i> {{$profile->role}}</small></p>
+                      <p class="card-text text-left"><small class="text-muted"><i class="fas fa-hammer"></i> {{ $profile->role ? $profile->role->display_name : 'No Role' }}</small></p>
                     </div>
                   </div>
             </div>
@@ -70,7 +70,7 @@
                       </div>
                       <div class="form-group">
                           <label for="role" class="col-form-label">Role</label>
-                          <input type="text" value="{{ucfirst($profile->role)}}" class="form-control" readonly style="background-color: #e9ecef;">
+                          <input type="text" value="{{ $profile->role ? $profile->role->display_name : 'No Role' }}" class="form-control" readonly style="background-color: #e9ecef;">
                           <small class="form-text text-muted">Role cannot be changed from profile page</small>
                         </div>
 

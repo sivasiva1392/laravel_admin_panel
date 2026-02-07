@@ -52,8 +52,8 @@
                             <img src="{{asset('backend/img/avatar.png')}}" class="img-fluid rounded-circle zoom" style="max-width:50px" alt="No avatar">
                         @endif
                     </td>
-                    <td>{{(($user->created_at)? $user->created_at->diffForHumans() : '')}}</td>
-                    <td>{{$user->role}}</td>
+                    <td>{{ $user->created_at ? $user->created_at->format('d M Y') : 'N/A' }}</td>
+                    <td>{{ $user->role ? $user->role->display_name : 'No Role' }}</td>
                     <td>
                         @if($user->status=='active')
                             <span class="badge badge-success">{{$user->status}}</span>

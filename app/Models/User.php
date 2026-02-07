@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role','photo','status','provider','provider_id','role_id',
+        'name', 'email', 'password','photo','status','provider','provider_id','role_id',
     ];
 
     /**
@@ -37,12 +37,6 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    /**
-     * The relations to eager load on every query.
-     *
-     * @var array
-     */
-    protected $with = ['role'];
 
     public function orders(){
         return $this->hasMany('App\Models\Order');
@@ -56,24 +50,4 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Role', 'role_id');
     }
     
-    /**
-     * Get the role name attribute.
-     */
-    public function getRoleNameAttribute()
-    {
-        // Use the role column as fallback if relationship doesn't work
-        if ($this->role_id) {
-            $role = \App\Models\Role::find($this->role_id);
-            return $role ? $role->name : $this->role;
-        }
-        return $this->role;
-    }
-    
-    /**
-     * Check if user has specific role
-     */
-    public function hasRole($roleName)
-    {
-        return $this->role_name === $roleName;
-    }
 }

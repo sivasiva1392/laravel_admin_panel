@@ -68,8 +68,8 @@ class PostController extends Controller
             $validated['slug'] = $slug;
             
             // Set user_id for tracking
-            if ((auth()->user()->hasRole('admin') || auth()->user()->hasRole('master')) && isset($validated['added_by'])) {
-                // Admin or master can assign to any user
+            if ((auth()->user()->role_id == 1 || auth()->user()->role_id == 2) && isset($validated['added_by'])) {
+                // Super admin (1) or admin (2) can assign to any user
                 $validated['added_by'] = $validated['added_by'];
             } else {
                 // Regular users can only create for themselves

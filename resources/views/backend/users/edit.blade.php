@@ -57,20 +57,15 @@
           <span class="text-danger">{{$message}}</span>
           @enderror
         </div>
-        @php 
-        $roles=DB::table('users')->select('role')->where('id',$user->id)->get();
-        // dd($roles);
-        @endphp
         <div class="form-group">
-            <label for="role" class="col-form-label">Role</label>
-            <select name="role" class="form-control">
+            <label for="role_id" class="col-form-label">Role</label>
+            <select name="role_id" class="form-control">
                 <option value="">-----Select Role-----</option>
                 @foreach($roles as $role)
-                    <option value="{{$role->role}}" {{(($role->role=='admin') ? 'selected' : '')}}>Admin</option>
-                    <option value="{{$role->role}}" {{(($role->role=='user') ? 'selected' : '')}}>User</option>
+                    <option value="{{$role->id}}" {{($user->role_id == $role->id) ? 'selected' : ''}}>{{$role->display_name}}</option>
                 @endforeach
             </select>
-          @error('role')
+          @error('role_id')
           <span class="text-danger">{{$message}}</span>
           @enderror
           </div>
