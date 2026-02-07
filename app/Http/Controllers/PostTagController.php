@@ -14,7 +14,12 @@ class PostTagController extends Controller
      */
     public function index()
     {
-        $postTag=PostTag::orderBy('id','DESC')->paginate(10);
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $postTag = PostTag::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
+        } else {
+            $postTag = PostTag::orderBy('id','DESC')->paginate(10);
+        }
         return view('backend.posttag.index')->with('postTags',$postTag);
     }
 
@@ -47,6 +52,7 @@ class PostTagController extends Controller
             $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
         }
         $data['slug']=$slug;
+        $data['user_id'] = auth()->id();
         $status=PostTag::create($data);
         if($status){
             request()->session()->flash('success','Post Tag Successfully added');

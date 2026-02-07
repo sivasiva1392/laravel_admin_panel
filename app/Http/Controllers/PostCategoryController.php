@@ -14,7 +14,12 @@ class PostCategoryController extends Controller
      */
     public function index()
     {
-        $postCategory=PostCategory::orderBy('id','DESC')->paginate(10);
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $postCategory = PostCategory::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
+        } else {
+            $postCategory = PostCategory::orderBy('id','DESC')->paginate(10);
+        }
         return view('backend.postcategory.index')->with('postCategories',$postCategory);
     }
 
@@ -48,6 +53,7 @@ class PostCategoryController extends Controller
             $slug=$slug.'-'.date('ymdis').'-'.rand(0,999);
         }
         $data['slug']=$slug;
+        $data['user_id'] = auth()->id();
         $status=PostCategory::create($data);
         if($status){
             request()->session()->flash('success','Post Category Successfully added');

@@ -17,8 +17,12 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts=Post::getAllPost();
-        // return $posts;
+        // If user is not admin or master, show only their records
+        if (!auth()->user()->isAdminOrMaster()) {
+            $posts = Post::with(['cat_info','author_info'])->where('added_by', auth()->id())->orderBy('id','DESC')->paginate(10);
+        } else {
+            $posts = Post::getAllPost();
+        }
         return view('backend.post.index')->with('posts',$posts);
     }
 
@@ -66,7 +70,15 @@ class PostController extends Controller
 
             $slug = generateUniqueSlug($request->title, Post::class);
             $validated['slug'] = $slug;
-            $validated['added_by'] = $validated['added_by'] ?? auth()->id();
+            
+            // Set user_id for tracking
+            if ((auth()->user()->hasRole('admin') || auth()->user()->hasRole('master')) && isset($validated['added_by'])) {
+                // Admin or master can assign to any user
+                $validated['added_by'] = $validated['added_by'];
+            } else {
+                // Regular users can only create for themselves
+                $validated['added_by'] = auth()->id();
+            }
             
             if ($request->filled('tags')) {
                 $validated['tags'] = implode(',', $request->input('tags'));

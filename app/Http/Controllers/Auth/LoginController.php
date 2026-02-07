@@ -38,7 +38,33 @@ class LoginController extends Controller
      */
 
     public function credentials(Request $request){
-        return ['email'=>$request->email,'password'=>$request->password,'status'=>'active','role'=>'admin'];
+        return ['email'=>$request->email,'password'=>$request->password,'status'=>'active'];
+    }
+    
+    /**
+     * Where to redirect users after login.
+     *
+     * @var string
+     */
+    public function redirectPath()
+    {
+        if (auth()->user()->hasRole('master')) {
+            return '/admin';
+        } elseif (auth()->user()->hasRole('admin')) {
+            return '/admin';
+        } else {
+            return '/user';
+        }
+    }
+    
+    /**
+     * Get the post login redirect path.
+     *
+     * @return string
+     */
+    protected function redirectTo()
+    {
+        return $this->redirectPath();
     }
     public function __construct()
     {
