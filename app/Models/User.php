@@ -50,4 +50,34 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Role', 'role_id');
     }
     
+    /**
+     * Check if user has specific permission
+     */
+    public function hasPermission($permissionName)
+    {
+        if (!$this->role) {
+            return false;
+        }
+        
+        return $this->role->hasPermission($permissionName);
+    }
+    
+    /**
+     * Check if user can access a specific module
+     */
+    public function canAccessModule($module)
+    {
+        if (!$this->role) {
+            return false;
+        }
+        
+        // Super admin can access everything
+        if ($this->role_id == 1) {
+            return true;
+        }
+        
+        // Check if role has any permission for this module
+        return $this->role->permissions()->where('module', $module)->exists();
+    }
+    
 }

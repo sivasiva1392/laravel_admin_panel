@@ -26,7 +26,8 @@ class UsersController extends Controller
     public function create()
     {
         $roles = \App\Models\Role::all();
-        return view('backend.users.create')->with('roles', $roles);
+        $permissions = \App\Models\Permission::orderBy('module')->orderBy('display_name')->get();
+        return view('backend.users.create')->with('roles', $roles)->with('permissions', $permissions);
     }
 
     /**
@@ -58,6 +59,11 @@ class UsersController extends Controller
             $validated['password'] = Hash::make($validated['password']);
             $user = User::create($validated);
             
+            // Handle permissions if role is not super admin
+            if ($user->role_id != 1 && $request->has('permissions')) {
+                $user->role->permissions()->sync($request->permissions);
+            }
+            
             return redirect()->route('users.index')
                 ->with('success', 'Successfully added user');
         } catch (\Exception $e) {
@@ -88,7 +94,19 @@ class UsersController extends Controller
     {
         $user=User::findOrFail($id);
         $roles = \App\Models\Role::all();
-        return view('backend.users.edit')->with('user',$user)->with('roles', $roles);
+        $permissions = \App\Models\Permission::orderBy('module')->orderBy('display_name')->get();
+        
+        // Get user's current permissions
+        $userPermissions = [];
+        if ($user->role && $user->role_id != 1) {
+            $userPermissions = $user->role->permissions->pluck('id')->toArray();
+        }
+        
+        return view('backend.users.edit')
+            ->with('user', $user)
+            ->with('roles', $roles)
+            ->with('permissions', $permissions)
+            ->with('userPermissions', $userPermissions);
     }
 
     /**
@@ -136,6 +154,15 @@ class UsersController extends Controller
             }
             
             $status = $user->update($validated);
+            
+            // Handle permissions if role is not super admin
+            if ($user->role_id != 1) {
+                if ($request->has('permissions')) {
+                    $user->role->permissions()->sync($request->permissions);
+                } else {
+                    $user->role->permissions()->detach();
+                }
+            }
             
             return redirect()->route('users.index')
                 ->with($status ? 'success' : 'error',

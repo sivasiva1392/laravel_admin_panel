@@ -22,11 +22,13 @@
    </div>
    <!-- Nav Item - Pages Collapse Menu -->
    <!-- Nav Item - Charts -->
+   @if(auth()->user()->canAccessModule('banners') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/banner') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('banner.index')}}">
       <i class="fas fa-image"></i>
       <span>Banners</span></a>
    </li>
+   @endif
    <!-- Divider -->
    <hr class="sidebar-divider">
    <!-- Heading -->
@@ -34,65 +36,81 @@
       Shop
    </div>
    <!-- Categories -->
+   @if(auth()->user()->canAccessModule('categories') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/category') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('category.index')}}">
       <i class="fas fa-sitemap"></i>
       <span>Category</span></a>
    </li>
+   @endif
+   @if(auth()->user()->canAccessModule('brands') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/brand') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('brand.index')}}">
       <i class="fas fa-table"></i>
       <span>Brands</span></a>
    </li>
+   @endif
+   @if(auth()->user()->canAccessModule('products') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/product') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('product.index')}}">
       <i class="fas fa-cubes"></i>
       <span>Products</span></a>
    </li>
+   @endif
    <!-- Divider -->
    <hr class="sidebar-divider">
    <!-- Heading -->
    <div class="sidebar-heading">
       Posts
    </div>
+   @if(auth()->user()->canAccessModule('posts') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post') && !Str::startsWith(request()->path(), 'admin/post-category') && !Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('post.index')}}">
       <i class="fas fa-fw fa-folder"></i>
       <span>Posts</span></a>
    </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_categories') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-category') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('post-category.index')}}">
       <i class="fas fa-folder"></i>
       <span>Category</span></a>
    </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('post-tag.index')}}">
       <i class="fas fa-tags"></i>
       <span>Tags</span></a>
    </li>
+   @endif
    <!-- Divider -->
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
    <div class="sidebar-heading">
       General Settings
    </div>
+   @if(auth()->user()->canAccessModule('coupons') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/coupon') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('coupon.index')}}">
       <i class="fas fa-table"></i>
       <span>Coupon</span></a>
    </li>
-   <!-- Users -->
+   @endif
+   @if(auth()->user()->canAccessModule('users') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/users') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('users.index')}}">
       <i class="fas fa-users"></i>
       <span>Users</span></a>
    </li>
-   <!-- General settings -->
+   @endif
+   @if(auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/settings') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('settings')}}">
       <i class="fas fa-cog"></i>
       <span>Settings</span></a>
    </li>
+   @endif
    <!-- Sidebar Toggler (Sidebar) -->
    <div class="text-center d-none d-md-inline">
       <button class="rounded-circle border-0" id="sidebarToggle"></button>
