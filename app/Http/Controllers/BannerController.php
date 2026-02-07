@@ -15,11 +15,7 @@ class BannerController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $banners = Banner::where('user_id', auth()->id())->latest('id')->paginate(10);
-        } else {
-            $banners = Banner::latest('id')->paginate(10);
-        }
+        $banners = Banner::where('user_id', auth()->id())->latest('id')->paginate(10);
         return view('backend.banner.index', compact('banners'));
     }
 

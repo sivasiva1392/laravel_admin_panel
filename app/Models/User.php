@@ -76,12 +76,4 @@ class User extends Authenticatable
     {
         return $this->role_name === $roleName;
     }
-    
-    /**
-     * Check if user is admin or master
-     */
-    public function isAdminOrMaster()
-    {
-        return $this->hasRole('admin') || $this->hasRole('master');
-    }
 }

@@ -18,11 +18,7 @@ class PostController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $posts = Post::with(['cat_info','author_info'])->where('added_by', auth()->id())->orderBy('id','DESC')->paginate(10);
-        } else {
-            $posts = Post::getAllPost();
-        }
+        $posts = Post::with(['cat_info','author_info'])->where('added_by', auth()->id())->orderBy('id','DESC')->paginate(10);
         return view('backend.post.index')->with('posts',$posts);
     }
 

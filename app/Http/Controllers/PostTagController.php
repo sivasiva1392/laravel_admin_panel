@@ -15,11 +15,7 @@ class PostTagController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $postTag = PostTag::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
-        } else {
-            $postTag = PostTag::orderBy('id','DESC')->paginate(10);
-        }
+        $postTag = PostTag::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
         return view('backend.posttag.index')->with('postTags',$postTag);
     }
 

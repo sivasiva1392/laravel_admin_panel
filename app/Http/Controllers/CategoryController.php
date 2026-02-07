@@ -15,11 +15,7 @@ class CategoryController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $categories = Category::where('user_id', auth()->id())->orderBy('id','DESC')->with('parent_info')->paginate(10);
-        } else {
-            $categories = Category::getAllCategory();
-        }
+        $categories = Category::where('user_id', auth()->id())->orderBy('id','DESC')->with('parent_info')->paginate(10);
         return view('backend.category.index', compact('categories'));
     }
 

@@ -19,11 +19,7 @@ class ProductController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $products = Product::where('user_id', auth()->id())->with(['cat_info','sub_cat_info'])->orderBy('id','desc')->paginate(10);
-        } else {
-            $products = Product::getAllProduct();
-        }
+        $products = Product::where('user_id', auth()->id())->with(['cat_info','sub_cat_info'])->orderBy('id','desc')->paginate(10);
         return view('backend.product.index', compact('products'));
     }
 

@@ -1,9 +1,3 @@
-@php
-function isAdmin() {
-    return auth()->user()->isAdminOrMaster();
-}
-?>
-
 <!-- Sidebar Menu -->
 <div class="sidebar">
     <div class="sidebar-header">

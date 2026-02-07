@@ -15,11 +15,7 @@ class PostCategoryController extends Controller
     public function index()
     {
         // If user is not admin or master, show only their records
-        if (!auth()->user()->isAdminOrMaster()) {
-            $postCategory = PostCategory::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
-        } else {
-            $postCategory = PostCategory::orderBy('id','DESC')->paginate(10);
-        }
+        $postCategory = PostCategory::where('user_id', auth()->id())->orderBy('id','DESC')->paginate(10);
         return view('backend.postcategory.index')->with('postCategories',$postCategory);
     }
 
