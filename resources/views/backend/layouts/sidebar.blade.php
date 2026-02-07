@@ -16,10 +16,11 @@
    </li>
    <!-- Divider -->
    <hr class="sidebar-divider">
-   <!-- Heading -->
+   @if(auth()->user()->canAccessModule('banners') || auth()->user()->role_id == 1)
    <div class="sidebar-heading">
       Banner
    </div>
+   @endif
    <!-- Nav Item - Pages Collapse Menu -->
    <!-- Nav Item - Charts -->
    @if(auth()->user()->canAccessModule('banners') || auth()->user()->role_id == 1)
@@ -30,11 +31,13 @@
    </li>
    @endif
    <!-- Divider -->
+   @if(auth()->user()->canAccessModule('categories') || auth()->user()->canAccessModule('brands') || auth()->user()->canAccessModule('products') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider">
    <!-- Heading -->
    <div class="sidebar-heading">
       Shop
    </div>
+   @endif
    <!-- Categories -->
    @if(auth()->user()->canAccessModule('categories') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/category') ? 'active' : '' }}">
@@ -58,11 +61,13 @@
    </li>
    @endif
    <!-- Divider -->
+   @if(auth()->user()->canAccessModule('posts') || auth()->user()->canAccessModule('post_categories') || auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider">
    <!-- Heading -->
    <div class="sidebar-heading">
       Posts
    </div>
+   @endif
    @if(auth()->user()->canAccessModule('posts') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post') && !Str::startsWith(request()->path(), 'admin/post-category') && !Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('post.index')}}">
@@ -85,11 +90,13 @@
    </li>
    @endif
    <!-- Divider -->
+   @if(auth()->user()->canAccessModule('coupons') || auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
    <div class="sidebar-heading">
       General Settings
    </div>
+   @endif
    @if(auth()->user()->canAccessModule('coupons') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/coupon') ? 'active' : '' }}">
       <a class="nav-link" href="{{route('coupon.index')}}">
