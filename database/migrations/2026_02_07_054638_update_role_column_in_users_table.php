@@ -13,9 +13,7 @@ class UpdateRoleColumnInUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role',['master','admin','user'])->default('user')->change();
-        });
+        \DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('master','admin','user') DEFAULT 'user'");
     }
 
     /**
@@ -25,8 +23,6 @@ class UpdateRoleColumnInUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('role',['admin','user'])->default('user')->change();
-        });
+        \DB::statement("ALTER TABLE users MODIFY COLUMN role ENUM('admin','user') DEFAULT 'user'");
     }
 }
