@@ -15,11 +15,11 @@ class UsersTableSeeder extends Seeder
     {
         $data=array(
             array(
-                'name'=>'Admin',
-                'email'=>'admin@gmail.com',
-                'password'=>Hash::make('12345678'),
-                'role'=>'admin',
-                'status'=>'active'
+                'name' => 'Super Admin',
+                'email' => 'superadmin@gmail.com',
+                'password' => \Hash::make('12345678'),
+                'role_id' => 1,
+                'status' => 'active',
             ),
         );
 

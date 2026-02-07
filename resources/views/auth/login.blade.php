@@ -25,8 +25,18 @@
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
+                    <div class="mb-4">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showUserLogin()">
+                          User Login
+                        </button>
+                        <button type="button" class="btn btn-primary btn-sm ml-2" onclick="showAdminLogin()">
+                          Admin Login
+                        </button>
+                    </div>
                   </div>
-                  <form class="user"  method="POST" action="{{ route('login') }}">
+                  
+                  <!-- User Login Form -->
+                  <form id="userLoginForm" class="user" method="POST" action="{{ route('login') }}">
                     @csrf
                     <div class="form-group">
                       <input type="email" class="form-control form-control-user @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..."  required autocomplete="email" autofocus>
@@ -55,7 +65,41 @@
                         </div>
                     </div>
                     <button type="submit" class="btn btn-primary btn-user btn-block">
-                      Login
+                      User Login
+                    </button>
+                  </form>
+                  
+                  <!-- Admin Login Form -->
+                  <form id="adminLoginForm" class="user" method="POST" action="{{ route('login') }}" style="display: none;">
+                    @csrf
+                    <input type="hidden" name="user_type" value="admin">
+                    <div class="form-group">
+                      <input type="email" class="form-control form-control-user @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" id="adminEmail" aria-describedby="emailHelp" placeholder="Enter Admin Email..."  required autocomplete="email" autofocus>
+                        @error('email')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control form-control-user @error('password') is-invalid @enderror" id="adminPassword" placeholder="Admin Password"  name="password" required autocomplete="current-password">
+                         @error('password')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                    <div class="form-group">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="remember" id="adminRemember" {{ old('remember') ? 'checked' : '' }}>
+
+                            <label class="form-check-label" for="adminRemember">
+                                {{ __('Remember Me') }}
+                            </label>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-danger btn-user btn-block">
+                      Admin Login
                     </button>
                   </form>
                   <hr>
@@ -79,5 +123,22 @@
 
   </div>
 </body>
+
+<script>
+function showUserLogin() {
+    document.getElementById('userLoginForm').style.display = 'block';
+    document.getElementById('adminLoginForm').style.display = 'none';
+}
+
+function showAdminLogin() {
+    document.getElementById('userLoginForm').style.display = 'none';
+    document.getElementById('adminLoginForm').style.display = 'block';
+}
+
+// Show user login form by default
+document.addEventListener('DOMContentLoaded', function() {
+    showUserLogin();
+});
+</script>
 
 </html>

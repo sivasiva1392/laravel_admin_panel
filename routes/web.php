@@ -94,5 +94,30 @@
         Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('change.password');
     });
 
+    // User section start - for non-admin users
+    Route::group(['prefix' => '/user', 'middleware' => ['auth', 'user']], function () {
+        Route::get('/', [AdminController::class, 'index'])->name('user.dashboard');
+        // Banner
+        Route::resource('banner', 'BannerController');
+        // Brand
+        Route::resource('brand', 'BrandController');
+        // Profile
+        Route::get('/profile', [AdminController::class, 'profile'])->name('user-profile');
+        Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('user-profile-update');
+        // Category
+        Route::resource('/category', 'CategoryController');
+        // Product
+        Route::resource('/product', 'ProductController');
+        // Post category
+        Route::resource('/post-category', 'PostCategoryController');
+        // Post tag
+        Route::resource('/post-tag', 'PostTagController');
+        // Post
+        Route::resource('/post', 'PostController');
+        // Password Change
+        Route::get('change-password', [AdminController::class, 'changePassword'])->name('user.change.password.form');
+        Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('user.change.password');
+    });
+
     // Direct image upload route
     Route::post('/upload-image', [AdminController::class, 'uploadImage'])->name('upload.image');
