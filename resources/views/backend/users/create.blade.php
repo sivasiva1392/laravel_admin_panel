@@ -32,6 +32,14 @@
         </div>
 
         <div class="form-group">
+            <label for="inputPasswordConfirmation" class="col-form-label">Confirm Password</label>
+          <input id="inputPasswordConfirmation" type="password" name="password_confirmation" placeholder="Confirm password"  value="{{old('password_confirmation')}}" class="form-control">
+          @error('password_confirmation')
+          <span class="text-danger">{{$message}}</span>
+          @enderror
+        </div>
+
+        <div class="form-group">
         <label for="inputPhoto" class="col-form-label">Photo</label>
         <input type="file" class="form-control-file" accept="image/*" name="photo">
         <small class="text-muted">Upload user avatar (JPEG, PNG, JPG, GIF - Max 2MB)</small>

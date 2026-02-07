@@ -58,8 +58,76 @@
 
   @stack('scripts')
 
+  <style>
+    /* Fix dropdown z-index and positioning */
+    .navbar-nav .dropdown-menu {
+      z-index: 99999 !important;
+      position: absolute !important;
+      right: 0 !important;
+      left: auto !important;
+      background: white !important;
+      border: 1px solid #dee2e6 !important;
+      box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.175) !important;
+      min-width: 200px !important;
+    }
+    
+    .navbar-nav .dropdown-menu.show {
+      display: block !important;
+    }
+    
+    .navbar-nav .dropdown-item:hover {
+      background-color: #f8f9fa !important;
+    }
+    
+    /* Ensure dropdown appears above everything */
+    .topbar {
+      position: relative !important;
+      z-index: 1000 !important;
+    }
+    
+    .navbar {
+      position: relative !important;
+      z-index: 1001 !important;
+    }
+  </style>
+
   <script>
     setTimeout(function(){
       $('.alert').slideUp();
     },4000);
+
+    // Simple dropdown fix
+    $(document).ready(function() {
+      // Handle user dropdown click
+      $('#userDropdown').on('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        var $dropdown = $(this).next('.dropdown-menu');
+        var isShowing = $dropdown.hasClass('show');
+        
+        // Close all dropdowns
+        $('.dropdown-menu').removeClass('show');
+        
+        // Toggle this dropdown
+        if (!isShowing) {
+          $dropdown.addClass('show');
+        }
+        
+        return false;
+      });
+      
+      // Close dropdown when clicking outside
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('.dropdown').length) {
+          $('.dropdown-menu').removeClass('show');
+        }
+      });
+      
+      // Handle logout link properly
+      $('.dropdown-item[href*="logout"]').on('click', function(e) {
+        e.preventDefault();
+        $('#logout-form').submit();
+      });
+    });
   </script>

@@ -31,7 +31,15 @@ class AdminController extends Controller
             $array[++$key] = [$value->day_name, $value->count];
         }
         
-        return view('backend.index')->with('users', json_encode($array));
+        // Get recent users for dashboard
+        $recentUsers = User::with('role')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+        
+        return view('backend.index')
+            ->with('users', json_encode($array))
+            ->with('recentUsers', $recentUsers);
     }
 
     public function profile()

@@ -12,7 +12,7 @@
     <div class="row">
 
       <!-- Category -->
-      <div class="col-xl-3 col-md-6 mb-4">
+      <div class="col-xl-4 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
@@ -29,7 +29,7 @@
       </div>
 
       <!-- Products -->
-      <div class="col-xl-3 col-md-6 mb-4">
+      <div class="col-xl-4 col-md-6 mb-4">
         <div class="card border-left-success shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
@@ -46,7 +46,7 @@
       </div>
 
       <!--Posts-->
-      <div class="col-xl-3 col-md-6 mb-4">
+      <div class="col-xl-4 col-md-6 mb-4">
         <div class="card border-left-warning shadow h-100 py-2">
           <div class="card-body">
             <div class="row no-gutters align-items-center">
@@ -74,9 +74,58 @@
           </div>
           <!-- Card Body -->
           <div class="card-body">
-            <div class="text-center">
-              <p class="text-muted">Welcome to Admin Dashboard</p>
-              <p>Manage your products, categories, orders, and more from here.</p>
+             <!-- Users List -->
+            <div>
+              @if(isset($recentUsers) && $recentUsers->count() > 0)
+                <div class="table-responsive table-hover table-bordered">
+                  <table class="table table-sm">
+                    <thead>
+                      <tr>
+                        <th>Name</th>
+                        <th>Role</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @foreach($recentUsers as $user)
+                      <tr>
+                        <td>
+                          <div class="d-flex align-items-center">
+                            @if($user->photo)
+                              <img src="{{ $user->photo }}" class="rounded-circle mr-2" style="width: 25px; height: 25px; object-fit: cover;">
+                            @else
+                              <img src="{{asset('backend/img/avatar.png')}}" class="rounded-circle mr-2" style="width: 25px; height: 25px; object-fit: cover;">
+                            @endif
+                            <div>
+                              <div class="font-weight-bold text-sm">{{ $user->name }}</div>
+                              <small class="text-muted">{{ $user->email }}</small>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <span class="badge badge-{{ $user->role_id == 1 ? 'danger' : ($user->role_id == 2 ? 'warning' : 'info') }} badge-sm">
+                            {{ $user->role ? $user->role->display_name : 'No Role' }}
+                          </span>
+                        </td>
+                        <td>
+                          <span class="badge badge-{{ $user->status == 'active' ? 'success' : 'secondary' }} badge-sm">
+                            {{ $user->status }}
+                          </span>
+                        </td>
+                      </tr>
+                      @endforeach
+                    </tbody>
+                  </table>
+                </div>
+                <div class="text-center mt-3">
+                  <a href="{{route('users.index')}}" class="btn btn-sm btn-outline-primary">View All Users</a>
+                </div>
+              @else
+                <div class="text-center py-3">
+                  <i class="fas fa-users fa-2x text-gray-300 mb-2"></i>
+                  <p class="text-muted mb-0">No users found</p>
+                </div>
+              @endif
             </div>
           </div>
         </div>
