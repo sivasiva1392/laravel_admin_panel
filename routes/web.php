@@ -11,6 +11,8 @@
     use App\Http\Controllers\NotificationController;
     use \UniSharp\LaravelFilemanager\Lfm;
     use App\Http\Controllers\Auth\ResetPasswordController;
+    use App\Http\Controllers\LmsController;
+use App\Http\Controllers\LmsCategoryController;
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -92,6 +94,10 @@
         // Password Change
         Route::get('change-password', [AdminController::class, 'changePassword'])->name('change.password.form');
         Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('change.password');
+        
+        // LMS Module
+        Route::resource('lms-categories', 'LmsCategoryController');
+        Route::resource('lms', 'LmsController');
     });
 
     // User section start - for non-admin users

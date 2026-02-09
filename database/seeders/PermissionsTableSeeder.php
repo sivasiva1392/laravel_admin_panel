@@ -75,6 +75,18 @@ class PermissionsTableSeeder extends Seeder
             // Settings permissions
             ['name' => 'view_settings', 'display_name' => 'View Settings', 'module' => 'settings'],
             ['name' => 'edit_settings', 'display_name' => 'Edit Settings', 'module' => 'settings'],
+            
+            // LMS Category permissions
+            ['name' => 'view_lms_categories', 'display_name' => 'View LMS Categories', 'module' => 'lms_categories'],
+            ['name' => 'create_lms_categories', 'display_name' => 'Create LMS Categories', 'module' => 'lms_categories'],
+            ['name' => 'edit_lms_categories', 'display_name' => 'Edit LMS Categories', 'module' => 'lms_categories'],
+            ['name' => 'delete_lms_categories', 'display_name' => 'Delete LMS Categories', 'module' => 'lms_categories'],
+            
+            // LMS Document permissions
+            ['name' => 'view_lms', 'display_name' => 'View LMS Documents', 'module' => 'lms'],
+            ['name' => 'create_lms', 'display_name' => 'Create LMS Documents', 'module' => 'lms'],
+            ['name' => 'edit_lms', 'display_name' => 'Edit LMS Documents', 'module' => 'lms'],
+            ['name' => 'delete_lms', 'display_name' => 'Delete LMS Documents', 'module' => 'lms'],
         ];
 
         foreach ($permissions as $permission) {

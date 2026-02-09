@@ -90,6 +90,28 @@
    </li>
    @endif
    <!-- Divider -->
+   <hr class="sidebar-divider d-none d-md-block">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      LMS
+   </div>
+   <!-- LMS Categories -->
+   @if(auth()->user()->canAccessModule('lms_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/lms-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('lms-categories.index')}}">
+      <i class="fas fa-folder-open"></i>
+      <span>LMS Categories</span></a>
+   </li>
+   @endif
+   <!-- LMS Documents -->
+   @if(auth()->user()->canAccessModule('lms') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/lms') && !Str::startsWith(request()->path(), 'admin/lms-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('lms.index')}}">
+      <i class="fas fa-file-alt"></i>
+      <span>LMS Documents</span></a>
+   </li>
+   @endif
+   <!-- Divider -->
    @if(auth()->user()->canAccessModule('coupons') || auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
