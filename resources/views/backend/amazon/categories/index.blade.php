@@ -30,6 +30,7 @@
               <th>Category Name</th>
               <th>Description</th>
               <th>Status</th>
+              <th>Show</th>
               <th>Action</th>
             </tr>
           </thead>
@@ -40,6 +41,7 @@
               <th>Category Name</th>
               <th>Description</th>
               <th>Status</th>
+              <th>Show</th>
               <th>Action</th>
             </tr>
           </tfoot>
@@ -64,6 +66,9 @@
                                 <span class="badge badge-warning">Inactive</span>
                             @endif
                         </button>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="is-show-checkbox" data-id="{{$category->id}}" data-route="{{route('amazon-categories.toggle-is-show', $category->id)}}" {{ $category->is_show == 1 ? 'checked' : '' }}>
                     </td>
                     <td>
                         <a href="{{route('amazon-categories.edit',$category->id)}}" class="btn btn-primary btn-sm float-left mr-1" style="height:30px; width:30px;border-radius:50%" data-toggle="tooltip" title="edit" data-placement="bottom"><i class="fas fa-edit"></i></a>
@@ -155,6 +160,36 @@
                     }
                 },
                 error: function(xhr) {
+                    swal("Error!", "Something went wrong. Please try again.", "error");
+                }
+            });
+        });
+        
+        // Is Show checkbox functionality
+        $('.is-show-checkbox').change(function(e){
+            e.preventDefault();
+            var checkbox = $(this);
+            var route = checkbox.data('route');
+            var currentIsShow = checkbox.is(':checked') ? 1 : 0;
+            
+            $.ajax({
+                url: route,
+                type: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response.success) {
+                        // Update checkbox state
+                        checkbox.prop('checked', response.is_show == 1);
+                        
+                        // Show success message
+                        swal("Success!", response.message, "success");
+                    }
+                },
+                error: function(xhr) {
+                    // Revert checkbox state on error
+                    checkbox.prop('checked', currentIsShow == 1);
                     swal("Error!", "Something went wrong. Please try again.", "error");
                 }
             });

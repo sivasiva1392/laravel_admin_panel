@@ -14,6 +14,7 @@ class AmazonCategory extends Model
         'description',
         'image',
         'status',
+        'is_show',
         'user_id'
     ];
     

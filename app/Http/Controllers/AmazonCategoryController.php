@@ -55,6 +55,7 @@ class AmazonCategoryController extends Controller
                                 'category_name' => $categoryName,
                                 'description' => $description,
                                 'status' => in_array($status, ['active', 'inactive']) ? $status : 'active',
+                                'is_show' => 0, // Set default is_show to 0
                                 'user_id' => auth()->id()
                             ]);
                             $imported++;
@@ -84,6 +85,7 @@ class AmazonCategoryController extends Controller
 
         $data = $request->except('image');
         $data['status'] = 'active'; // Set default status
+        $data['is_show'] = 0; // Set default is_show to 0
         
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -120,6 +122,7 @@ class AmazonCategoryController extends Controller
         $category = AmazonCategory::findOrFail($id);
         $data = $request->except('image');
         $data['status'] = 'active'; // Set default status
+        $data['is_show'] = $data['is_show'] ?? 0; // Keep existing is_show or set to 0
         
         if ($request->hasFile('image')) {
             // Delete old image
@@ -149,6 +152,19 @@ class AmazonCategoryController extends Controller
             'success' => true,
             'status' => $category->status,
             'message' => 'Category status updated successfully.'
+        ]);
+    }
+
+    public function toggleIsShow($id)
+    {
+        $category = AmazonCategory::findOrFail($id);
+        $category->is_show = $category->is_show == 1 ? 0 : 1;
+        $category->save();
+        
+        return response()->json([
+            'success' => true,
+            'is_show' => $category->is_show,
+            'message' => 'Category visibility updated successfully.'
         ]);
     }
 

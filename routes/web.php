@@ -107,6 +107,7 @@ use App\Http\Controllers\AmazonProductController;
         Route::resource('amazon-categories', 'AmazonCategoryController');
         Route::resource('amazon-products', 'AmazonProductController');
         Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
+        Route::post('amazon-categories/{id}/toggle-is-show', [AmazonCategoryController::class, 'toggleIsShow'])->name('amazon-categories.toggle-is-show');
         Route::post('amazon-products/{id}/toggle-status', [AmazonProductController::class, 'toggleStatus'])->name('amazon-products.toggle-status');
     });
 

@@ -16,37 +16,7 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-8 offset-md-2">
-                <!-- Instructions -->
-                <div class="alert alert-info">
-                    <h6><i class="fas fa-info-circle"></i> Instructions:</h6>
-                    <ol>
-                        <li>Prepare a CSV file with the following columns in order:</li>
-                        <ul>
-                            <li><strong>Category Name</strong> (required)</li>
-                            <li><strong>Description</strong> (optional)</li>
-                            <li><strong>Status</strong> (optional - "active" or "inactive", defaults to "active")</li>
-                        </ul>
-                        <li>The first row should contain headers.</li>
-                        <li>Duplicate category names will be skipped.</li>
-                        <li>Maximum file size: 10MB</li>
-                    </ol>
-                </div>
-
-                <!-- Sample CSV Format -->
-                <div class="alert alert-secondary">
-                    <h6><i class="fas fa-file-csv"></i> Sample CSV Format:</h6>
-                    <pre>category_name,description,status
-Electronics,Electronic devices and accessories,active
-Books,Books and literature,active
-Clothing,Fashion and apparel,inactive</pre>
-                </div>
-
-                <!-- Download Sample -->
-                <div class="text-center mb-4">
-                    <a href="{{asset('templates/amazon_categories_sample.csv')}}" class="btn btn-info btn-sm" download>
-                        <i class="fas fa-download"></i> Download Sample CSV Template
-                    </a>
-                </div>
+             
 
                 <!-- Upload Form -->
                 <form method="POST" action="{{route('amazon-categories.import.store')}}" enctype="multipart/form-data">
@@ -67,8 +37,32 @@ Clothing,Fashion and apparel,inactive</pre>
                         <a href="{{route('amazon-categories.index')}}" class="btn btn-secondary">
                             <i class="fas fa-times"></i> Cancel
                         </a>
+
+                          <!-- Download Sample -->
+                <!-- <div class="text-center mb-4"> -->
+                    <a href="{{asset('templates/amazon_categories_sample.csv')}}" class="btn btn-info btn-sm" download>
+                        <i class="fas fa-download"></i> Download Sample CSV Template
+                    </a>
+                <!-- </div> -->
                     </div>
                 </form>
+
+                   <!-- Instructions -->
+                <div>
+                    <h6><i class="fas fa-info-circle"></i> Instructions:</h6>
+                    <ol>
+                        <li>Prepare a CSV file with the following columns in order:</li>
+                        <ul>
+                            <li><strong>Category Name</strong> (required)</li>
+                            <li><strong>Description</strong> (optional)</li>
+                            <li><strong>Status</strong> (optional - "active" or "inactive", defaults to "active")</li>
+                        </ul>
+                        <li>The first row should contain headers.</li>
+                        <li>Duplicate category names will be skipped.</li>
+                        <li>Maximum file size: 10MB</li>
+                    </ol>
+                </div>
+              
             </div>
         </div>
     </div>
