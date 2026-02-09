@@ -102,6 +102,8 @@ use App\Http\Controllers\AmazonProductController;
         Route::resource('lms', 'LmsController');
         
         // Amazon Module
+        Route::get('amazon-categories/import', [AmazonCategoryController::class, 'import'])->name('amazon-categories.import');
+        Route::post('amazon-categories/import', [AmazonCategoryController::class, 'importStore'])->name('amazon-categories.import.store');
         Route::resource('amazon-categories', 'AmazonCategoryController');
         Route::resource('amazon-products', 'AmazonProductController');
         Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
@@ -111,10 +113,6 @@ use App\Http\Controllers\AmazonProductController;
     // User section start - for non-admin users
     Route::group(['prefix' => '/user', 'middleware' => ['auth', 'user']], function () {
         Route::get('/', [AdminController::class, 'index'])->name('user.dashboard');
-        // Banner
-        Route::resource('banner', 'BannerController');
-        // Brand
-        Route::resource('brand', 'BrandController');
         // Profile
         Route::get('/profile', [AdminController::class, 'profile'])->name('user-profile');
         Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('user-profile-update');

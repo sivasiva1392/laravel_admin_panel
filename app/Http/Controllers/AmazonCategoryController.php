@@ -18,6 +18,62 @@ class AmazonCategoryController extends Controller
         return view('backend.amazon.categories.create');
     }
 
+    public function import()
+    {
+        return view('backend.amazon.categories.import');
+    }
+
+    public function importStore(Request $request)
+    {
+        $request->validate([
+            'csv_file' => 'required|file|mimes:csv,txt|max:10240'
+        ]);
+
+        $file = $request->file('csv_file');
+        $path = $file->getRealPath();
+        
+        $imported = 0;
+        $skipped = 0;
+        $errors = [];
+
+        try {
+            $csvData = array_map('str_getcsv', file($path));
+            $headers = array_shift($csvData); // Remove header row
+            
+            foreach ($csvData as $row) {
+                if (count($row) >= 2) {
+                    $categoryName = trim($row[0]);
+                    $description = trim($row[1] ?? '');
+                    $status = trim($row[2] ?? 'active');
+                    
+                    if (!empty($categoryName)) {
+                        // Check if category already exists
+                        $existingCategory = AmazonCategory::where('category_name', $categoryName)->first();
+                        
+                        if (!$existingCategory) {
+                            AmazonCategory::create([
+                                'category_name' => $categoryName,
+                                'description' => $description,
+                                'status' => in_array($status, ['active', 'inactive']) ? $status : 'active',
+                                'user_id' => auth()->id()
+                            ]);
+                            $imported++;
+                        } else {
+                            $skipped++;
+                        }
+                    }
+                }
+            }
+            
+            return redirect()->route('amazon-categories.index')
+                ->with('success', "Import completed! {$imported} categories imported, {$skipped} skipped (duplicates).");
+                
+        } catch (\Exception $e) {
+            return redirect()->route('amazon-categories.import')
+                ->with('error', 'Error importing file: ' . $e->getMessage());
+        }
+    }
+
     public function store(Request $request)
     {
         $request->validate([

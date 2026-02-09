@@ -10,7 +10,14 @@
      </div>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary float-left">Amazon Categories</h6>
-      <a href="{{route('amazon-categories.create')}}" class="btn btn-primary btn-sm float-right" data-toggle="tooltip" data-placement="bottom" title="Add Category"><i class="fas fa-plus"></i> Add Category</a>
+      <div class="float-right">
+        <a href="{{route('amazon-categories.import')}}" class="btn btn-success btn-sm mr-2" data-toggle="tooltip" data-placement="bottom" title="Import Categories">
+            <i class="fas fa-file-import"></i> Import
+        </a>
+        <a href="{{route('amazon-categories.create')}}" class="btn btn-primary btn-sm" data-toggle="tooltip" data-placement="bottom" title="Add Category">
+            <i class="fas fa-plus"></i> Add Category
+        </a>
+      </div>
     </div>
     <div class="card-body">
       <div class="table-responsive">
