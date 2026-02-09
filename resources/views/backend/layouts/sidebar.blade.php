@@ -112,6 +112,28 @@
    </li>
    @endif
    <!-- Divider -->
+   <hr class="sidebar-divider d-none d-md-block">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      Amazon
+   </div>
+   <!-- Amazon Categories -->
+   @if(auth()->user()->canAccessModule('amazon_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/amazon-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('amazon-categories.index')}}">
+      <i class="fas fa-folder-open"></i>
+      <span>Amazon Categories</span></a>
+   </li>
+   @endif
+   <!-- Amazon Products -->
+   @if(auth()->user()->canAccessModule('amazon_products') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/amazon-products') && !Str::startsWith(request()->path(), 'admin/amazon-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('amazon-products.index')}}">
+      <i class="fas fa-box"></i>
+      <span>Amazon Products</span></a>
+   </li>
+   @endif
+   <!-- Divider -->
    @if(auth()->user()->canAccessModule('coupons') || auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->

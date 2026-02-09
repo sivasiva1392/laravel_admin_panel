@@ -13,6 +13,8 @@
     use App\Http\Controllers\Auth\ResetPasswordController;
     use App\Http\Controllers\LmsController;
 use App\Http\Controllers\LmsCategoryController;
+use App\Http\Controllers\AmazonCategoryController;
+use App\Http\Controllers\AmazonProductController;
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -98,6 +100,12 @@ use App\Http\Controllers\LmsCategoryController;
         // LMS Module
         Route::resource('lms-categories', 'LmsCategoryController');
         Route::resource('lms', 'LmsController');
+        
+        // Amazon Module
+        Route::resource('amazon-categories', 'AmazonCategoryController');
+        Route::resource('amazon-products', 'AmazonProductController');
+        Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
+        Route::post('amazon-products/{id}/toggle-status', [AmazonProductController::class, 'toggleStatus'])->name('amazon-products.toggle-status');
     });
 
     // User section start - for non-admin users

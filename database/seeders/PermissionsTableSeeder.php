@@ -87,6 +87,18 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'create_lms', 'display_name' => 'Create LMS Documents', 'module' => 'lms'],
             ['name' => 'edit_lms', 'display_name' => 'Edit LMS Documents', 'module' => 'lms'],
             ['name' => 'delete_lms', 'display_name' => 'Delete LMS Documents', 'module' => 'lms'],
+            
+            // Amazon Category permissions
+            ['name' => 'view_amazon_categories', 'display_name' => 'View Amazon Categories', 'module' => 'amazon_categories'],
+            ['name' => 'create_amazon_categories', 'display_name' => 'Create Amazon Categories', 'module' => 'amazon_categories'],
+            ['name' => 'edit_amazon_categories', 'display_name' => 'Edit Amazon Categories', 'module' => 'amazon_categories'],
+            ['name' => 'delete_amazon_categories', 'display_name' => 'Delete Amazon Categories', 'module' => 'amazon_categories'],
+            
+            // Amazon Product permissions
+            ['name' => 'view_amazon_products', 'display_name' => 'View Amazon Products', 'module' => 'amazon_products'],
+            ['name' => 'create_amazon_products', 'display_name' => 'Create Amazon Products', 'module' => 'amazon_products'],
+            ['name' => 'edit_amazon_products', 'display_name' => 'Edit Amazon Products', 'module' => 'amazon_products'],
+            ['name' => 'delete_amazon_products', 'display_name' => 'Delete Amazon Products', 'module' => 'amazon_products'],
         ];
 
         foreach ($permissions as $permission) {

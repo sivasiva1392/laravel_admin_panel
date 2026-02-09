@@ -43,6 +43,8 @@ class RolePermissionsTableSeeder extends Seeder
                 'view_coupons', 'create_coupons', 'edit_coupons', 'delete_coupons',
                 'view_lms_categories', 'create_lms_categories', 'edit_lms_categories', 'delete_lms_categories',
                 'view_lms', 'create_lms', 'edit_lms', 'delete_lms',
+                'view_amazon_categories', 'create_amazon_categories', 'edit_amazon_categories', 'delete_amazon_categories',
+                'view_amazon_products', 'create_amazon_products', 'edit_amazon_products', 'delete_amazon_products',
             ];
             
             foreach ($adminPermissions as $permissionName) {
