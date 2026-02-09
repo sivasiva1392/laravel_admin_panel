@@ -48,7 +48,7 @@
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="description">Description</label>
-                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" rows="4" placeholder="Enter document description">{{old('description')}}</textarea>
+                        <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" placeholder="Enter document description">{{old('description')}}</textarea>
                         @error('description')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
@@ -79,3 +79,26 @@
     </div>
 </div>
 @endsection
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+@endpush
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#description').summernote({
+        height: 200,
+        placeholder: 'Enter document description...',
+        toolbar: [
+            ['style', ['style', 'bold', 'italic', 'underline', 'clear']],
+            ['font', ['strikethrough', 'superscript', 'subscript']],
+            ['para', ['ul', 'ol', 'paragraph', 'height']],
+            ['insert', ['link', 'picture', 'video']],
+            ['view', ['fullscreen', 'codeview', 'help']]
+        ]
+    });
+});
+</script>
+@endpush
