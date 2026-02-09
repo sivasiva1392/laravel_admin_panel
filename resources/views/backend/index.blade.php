@@ -11,6 +11,82 @@
     <!-- Content Row -->
     <div class="row">
 
+      <!-- Total Users -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$userStats['total_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">Registered users</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-users fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Active Users -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$userStats['active_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">Currently active</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user-check fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- This Month Users -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">This Month</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$userStats['this_month_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">New registrations</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Users -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Admin Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$userStats['admin_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">System administrators</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user-shield fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Second Row for Categories, Products, Posts -->
+    <div class="row">
+
       <!-- Category -->
       <div class="col-xl-4 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
@@ -136,11 +212,139 @@
         <div class="card shadow mb-4">
           <!-- Card Header - Dropdown -->
           <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-            <h6 class="m-0 font-weight-bold text-primary">Users</h6>
+            <h6 class="m-0 font-weight-bold text-primary">User Registration (7 Days)</h6>
           </div>
           <!-- Card Body -->
           <div class="card-body" style="overflow:hidden">
-            <div id="pie_chart" style="width:350px; height:320px;">
+            <div id="pie_chart" style="width:100%; height:200px;">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Statistics Row -->
+    <div class="row">
+      <!-- Role Distribution Chart -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">User Role Distribution</h6>
+          </div>
+          <div class="card-body">
+            @if(isset($roleDistribution) && $roleDistribution->count() > 0)
+              <div class="table-responsive">
+                <table class="table table-sm">
+                  <thead>
+                    <tr>
+                      <th>Role</th>
+                      <th>Count</th>
+                      <th>Percentage</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @php
+                      $totalUsers = $userStats['total_users'] ?? 1;
+                    @endphp
+                    @foreach($roleDistribution as $role)
+                      <tr>
+                        <td>
+                          <span class="badge badge-{{ $role->role == 'Admin' ? 'danger' : ($role->role == 'Manager' ? 'warning' : 'info') }}">
+                            {{ $role->role }}
+                          </span>
+                        </td>
+                        <td>{{ $role->count }}</td>
+                        <td>
+                          <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-{{ $role->role == 'Admin' ? 'danger' : ($role->role == 'Manager' ? 'warning' : 'info') }}" 
+                                 role="progressbar" 
+                                 style="width: {{ round(($role->count / $totalUsers) * 100, 1) }}%"
+                                 aria-valuenow="{{ round(($role->count / $totalUsers) * 100, 1) }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                              {{ round(($role->count / $totalUsers) * 100, 1) }}%
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    @endforeach
+                  </tbody>
+                </table>
+              </div>
+            @else
+              <div class="text-center py-3">
+                <i class="fas fa-chart-pie fa-2x text-gray-300 mb-2"></i>
+                <p class="text-muted mb-0">No role data available</p>
+              </div>
+            @endif
+          </div>
+        </div>
+      </div>
+
+      <!-- User Statistics Summary -->
+      <div class="col-xl-6 col-lg-6">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">User Statistics Summary</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-users text-primary fa-2x"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-bold">Total Users</div>
+                    <div class="text-muted">{{ $userStats['total_users'] ?? 0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-user-check text-success fa-2x"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-bold">Active Users</div>
+                    <div class="text-muted">{{ $userStats['active_users'] ?? 0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-user-times text-secondary fa-2x"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-bold">Inactive Users</div>
+                    <div class="text-muted">{{ $userStats['inactive_users'] ?? 0 }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 mb-3">
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0">
+                    <i class="fas fa-chart-line text-info fa-2x"></i>
+                  </div>
+                  <div class="flex-grow-1 ms-3">
+                    <div class="fw-bold">Monthly Growth</div>
+                    <div class="text-muted">
+                      @php
+                        $growth = (($userStats['this_month_users'] ?? 0) - ($userStats['last_month_users'] ?? 0));
+                        $growthPercent = ($userStats['last_month_users'] ?? 0) > 0 
+                          ? round(($growth / $userStats['last_month_users']) * 100, 1) 
+                          : 0;
+                      @endphp
+                      @if($growth >= 0)
+                        <span class="text-success">+{{ $growth }} ({{ $growthPercent }}%)</span>
+                      @else
+                        <span class="text-danger">{{ $growth }} ({{ $growthPercent }}%)</span>
+                      @endif
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

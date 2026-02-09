@@ -16,6 +16,7 @@ class AdminController extends Controller
 {
     public function index()
     {
+        // User registration chart data (last 7 days)
         $data = User::select(
             DB::raw("COUNT(*) as count"),
             DB::raw("DAYNAME(created_at) as day_name"),
@@ -37,9 +38,32 @@ class AdminController extends Controller
             ->take(5)
             ->get();
         
+        // Enhanced user statistics
+        $userStats = [
+            'total_users' => User::count(),
+            'active_users' => User::where('status', 'active')->count(),
+            'inactive_users' => User::where('status', 'inactive')->count(),
+            'admin_users' => User::where('role_id', 1)->count(),
+            'user_users' => User::where('role_id', 3)->count(),
+            'this_month_users' => User::whereMonth('created_at', Carbon::now()->month)
+                                        ->whereYear('created_at', Carbon::now()->year)
+                                        ->count(),
+            'last_month_users' => User::whereMonth('created_at', Carbon::now()->subMonth()->month)
+                                        ->whereYear('created_at', Carbon::now()->subMonth()->year)
+                                        ->count(),
+        ];
+        
+        // User role distribution
+        $roleDistribution = User::join('roles', 'users.role_id', '=', 'roles.id')
+            ->select('roles.display_name as role', DB::raw('count(*) as count'))
+            ->groupBy('roles.display_name')
+            ->get();
+        
         return view('backend.index')
             ->with('users', json_encode($array))
-            ->with('recentUsers', $recentUsers);
+            ->with('recentUsers', $recentUsers)
+            ->with('userStats', $userStats)
+            ->with('roleDistribution', $roleDistribution);
     }
 
     public function profile()

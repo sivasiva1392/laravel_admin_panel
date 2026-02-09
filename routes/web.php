@@ -105,6 +105,9 @@ use App\Http\Controllers\AmazonProductController;
         Route::get('amazon-categories/import', [AmazonCategoryController::class, 'import'])->name('amazon-categories.import');
         Route::post('amazon-categories/import', [AmazonCategoryController::class, 'importStore'])->name('amazon-categories.import.store');
         Route::resource('amazon-categories', 'AmazonCategoryController');
+        
+        Route::get('amazon-products/import', [AmazonProductController::class, 'import'])->name('amazon-products.import');
+        Route::post('amazon-products/import', [AmazonProductController::class, 'importStore'])->name('amazon-products.import.store');
         Route::resource('amazon-products', 'AmazonProductController');
         Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
         Route::post('amazon-categories/{id}/toggle-is-show', [AmazonCategoryController::class, 'toggleIsShow'])->name('amazon-categories.toggle-is-show');

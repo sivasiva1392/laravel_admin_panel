@@ -1,0 +1,4 @@
+Product Name,Description,Link,Meta Title,Meta Description,Meta Keywords,Status
+Sample Product 1,"This is a sample product description",https://amazon.com/dp/B001234567,"Sample Product 1 - Best Price","Buy Sample Product 1 at best price with free shipping","sample,product,amazon,best price",active
+Sample Product 2,"Another sample product with detailed description",https://amazon.com/dp/B001234568,"Sample Product 2 - High Quality","Premium Sample Product 2 with high quality materials","sample,product,amazon,quality",active
+Sample Product 3,"Third sample product for testing",https://amazon.com/dp/B001234569,"Sample Product 3 - Discount","Sample Product 3 available at discount price","sample,product,amazon,discount",inactive

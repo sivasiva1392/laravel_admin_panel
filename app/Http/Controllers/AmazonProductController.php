@@ -20,6 +20,12 @@ class AmazonProductController extends Controller
         return view('backend.amazon.products.create', compact('categories'));
     }
 
+    public function import()
+    {
+        $categories = AmazonCategory::where('status', 'active')->pluck('category_name', 'id');
+        return view('backend.amazon.products.import', compact('categories'));
+    }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -46,6 +52,70 @@ class AmazonProductController extends Controller
         AmazonProduct::create(array_merge($data, ['user_id' => auth()->id()]));
         return redirect()->route('amazon-products.index')
             ->with('success', 'Product created successfully.');
+    }
+
+    public function importStore(Request $request)
+    {
+        $request->validate([
+            'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'csv_file' => 'required|file|mimes:csv,txt|max:10240'
+        ]);
+
+        $file = $request->file('csv_file');
+        $path = $file->getRealPath();
+        $categoryId = $request->amazon_category_id;
+        
+        $imported = 0;
+        $skipped = 0;
+        $errors = [];
+
+        try {
+            $csvData = array_map('str_getcsv', file($path));
+            $headers = array_shift($csvData); // Remove header row
+            
+            foreach ($csvData as $row) {
+                if (count($row) >= 2) {
+                    $productName = trim($row[0]);
+                    $description = trim($row[1] ?? '');
+                    $link = trim($row[2] ?? '');
+                    $metaTitle = trim($row[3] ?? '');
+                    $metaDescription = trim($row[4] ?? '');
+                    $metaKeywords = trim($row[5] ?? '');
+                    $status = trim($row[6] ?? 'active');
+                    
+                    if (!empty($productName)) {
+                        // Check if product already exists in the same category
+                        $existingProduct = AmazonProduct::where('product_name', $productName)
+                            ->where('amazon_category_id', $categoryId)
+                            ->first();
+                        
+                        if (!$existingProduct) {
+                            AmazonProduct::create([
+                                'amazon_category_id' => $categoryId,
+                                'product_name' => $productName,
+                                'description' => $description,
+                                'link' => $link,
+                                'meta_title' => $metaTitle,
+                                'meta_description' => $metaDescription,
+                                'meta_keywords' => $metaKeywords,
+                                'status' => in_array($status, ['active', 'inactive']) ? $status : 'active',
+                                'user_id' => auth()->id()
+                            ]);
+                            $imported++;
+                        } else {
+                            $skipped++;
+                        }
+                    }
+                }
+            }
+            
+            return redirect()->route('amazon-products.index')
+                ->with('success', "Import completed! {$imported} products imported, {$skipped} skipped (duplicates).");
+                
+        } catch (\Exception $e) {
+            return redirect()->route('amazon-products.import')
+                ->with('error', 'Error importing file: ' . $e->getMessage());
+        }
     }
 
     public function show($id)
