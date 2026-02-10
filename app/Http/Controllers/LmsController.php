@@ -10,13 +10,18 @@ class LmsController extends Controller
 {
     public function index()
     {
-        $documents = Lms::with('category')->latest()->paginate(10);
+        $documents = Lms::with('category')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
         return view('backend.lms.documents.index', compact('documents'));
     }
 
     public function create()
     {
-        $categories = LmsCategory::where('status', 'active')->pluck('category_name', 'id');
+        $categories = LmsCategory::where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->pluck('category_name', 'id');
         return view('backend.lms.documents.create', compact('categories'));
     }
 
@@ -46,14 +51,18 @@ class LmsController extends Controller
 
     public function show($id)
     {
-        $document = Lms::with('category')->findOrFail($id);
+        $document = Lms::with('category')
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
         return view('backend.lms.documents.show', compact('document'));
     }
 
     public function edit($id)
     {
-        $document = Lms::findOrFail($id);
-        $categories = LmsCategory::where('status', 'active')->pluck('category_name', 'id');
+        $document = Lms::where('user_id', auth()->id())->findOrFail($id);
+        $categories = LmsCategory::where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->pluck('category_name', 'id');
         return view('backend.lms.documents.edit', compact('document', 'categories'));
     }
 
@@ -67,7 +76,7 @@ class LmsController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        $document = Lms::findOrFail($id);
+        $document = Lms::where('user_id', auth()->id())->findOrFail($id);
         $data = $request->except('document');
         
         if ($request->hasFile('document')) {
@@ -89,7 +98,7 @@ class LmsController extends Controller
 
     public function destroy($id)
     {
-        $document = Lms::findOrFail($id);
+        $document = Lms::where('user_id', auth()->id())->findOrFail($id);
         
         // Delete file
         if ($document->document && file_exists(public_path('uploads/lms/' . $document->document))) {

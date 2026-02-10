@@ -90,11 +90,13 @@
    </li>
    @endif
    <!-- Divider -->
+   @if(auth()->user()->canAccessModule('lms_categories') || auth()->user()->canAccessModule('lms') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
    <div class="sidebar-heading">
       LMS
    </div>
+   @endif
    <!-- LMS Categories -->
    @if(auth()->user()->canAccessModule('lms_categories') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/lms-categories') ? 'active' : '' }}">
@@ -112,11 +114,13 @@
    </li>
    @endif
    <!-- Divider -->
+   @if(auth()->user()->canAccessModule('amazon_categories') || auth()->user()->canAccessModule('amazon_products') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
    <div class="sidebar-heading">
       Amazon
    </div>
+   @endif
    <!-- Amazon Categories -->
    @if(auth()->user()->canAccessModule('amazon_categories') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/amazon-categories') ? 'active' : '' }}">
@@ -134,7 +138,7 @@
    </li>
    @endif
    <!-- Divider -->
-   @if(auth()->user()->canAccessModule('coupons') || auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
+   @if(auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
    <!-- Heading -->
    <div class="sidebar-heading">
@@ -160,6 +164,13 @@
       <a class="nav-link" href="{{route('settings')}}">
       <i class="fas fa-cog"></i>
       <span>Settings</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/role-permissions') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('role-permissions.index')}}">
+      <i class="fas fa-user-shield"></i>
+      <span>Role Permissions</span></a>
    </li>
    @endif
    <!-- Sidebar Toggler (Sidebar) -->

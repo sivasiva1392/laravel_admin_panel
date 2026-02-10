@@ -9,7 +9,7 @@ class LmsCategoryController extends Controller
 {
     public function index()
     {
-        $categories = LmsCategory::latest()->paginate(10);
+        $categories = LmsCategory::where('user_id', auth()->id())->latest()->paginate(10);
         return view('backend.lms.categories.index', compact('categories'));
     }
 
@@ -32,13 +32,13 @@ class LmsCategoryController extends Controller
 
     public function show($id)
     {
-        $category = LmsCategory::findOrFail($id);
+        $category = LmsCategory::where('user_id', auth()->id())->findOrFail($id);
         return view('backend.lms.categories.show', compact('category'));
     }
 
     public function edit($id)
     {
-        $category = LmsCategory::findOrFail($id);
+        $category = LmsCategory::where('user_id', auth()->id())->findOrFail($id);
         return view('backend.lms.categories.edit', compact('category'));
     }
 
@@ -49,7 +49,7 @@ class LmsCategoryController extends Controller
             'status' => 'required|in:active,inactive'
         ]);
 
-        $category = LmsCategory::findOrFail($id);
+        $category = LmsCategory::where('user_id', auth()->id())->findOrFail($id);
         $category->update(array_merge($request->all(), ['user_id' => auth()->id()]));
         
         return redirect()->route('lms-categories.index')
@@ -58,7 +58,7 @@ class LmsCategoryController extends Controller
 
     public function destroy($id)
     {
-        $category = LmsCategory::findOrFail($id);
+        $category = LmsCategory::where('user_id', auth()->id())->findOrFail($id);
         $category->delete();
         
         return redirect()->route('lms-categories.index')

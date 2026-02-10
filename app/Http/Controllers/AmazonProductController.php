@@ -10,19 +10,26 @@ class AmazonProductController extends Controller
 {
     public function index()
     {
-        $products = AmazonProduct::with('category')->latest()->paginate(10);
+        $products = AmazonProduct::with('category')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
         return view('backend.amazon.products.index', compact('products'));
     }
 
     public function create()
     {
-        $categories = AmazonCategory::where('status', 'active')->pluck('category_name', 'id');
+        $categories = AmazonCategory::where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->pluck('category_name', 'id');
         return view('backend.amazon.products.create', compact('categories'));
     }
 
     public function import()
     {
-        $categories = AmazonCategory::where('status', 'active')->pluck('category_name', 'id');
+        $categories = AmazonCategory::where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->pluck('category_name', 'id');
         return view('backend.amazon.products.import', compact('categories'));
     }
 
@@ -87,6 +94,7 @@ class AmazonProductController extends Controller
                         // Check if product already exists in the same category
                         $existingProduct = AmazonProduct::where('product_name', $productName)
                             ->where('amazon_category_id', $categoryId)
+                            ->where('user_id', auth()->id())
                             ->first();
                         
                         if (!$existingProduct) {
@@ -120,14 +128,18 @@ class AmazonProductController extends Controller
 
     public function show($id)
     {
-        $product = AmazonProduct::with('category')->findOrFail($id);
+        $product = AmazonProduct::with('category')
+            ->where('user_id', auth()->id())
+            ->findOrFail($id);
         return view('backend.amazon.products.show', compact('product'));
     }
 
     public function edit($id)
     {
-        $product = AmazonProduct::findOrFail($id);
-        $categories = AmazonCategory::where('status', 'active')->pluck('category_name', 'id');
+        $product = AmazonProduct::where('user_id', auth()->id())->findOrFail($id);
+        $categories = AmazonCategory::where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->pluck('category_name', 'id');
         return view('backend.amazon.products.edit', compact('product', 'categories'));
     }
 
@@ -144,7 +156,7 @@ class AmazonProductController extends Controller
             'meta_keywords' => 'nullable|string|max:255'
         ]);
 
-        $product = AmazonProduct::findOrFail($id);
+        $product = AmazonProduct::where('user_id', auth()->id())->findOrFail($id);
         $data = $request->except('image');
         $data['status'] = 'active'; // Set default status
         
@@ -167,7 +179,7 @@ class AmazonProductController extends Controller
 
     public function toggleStatus($id)
     {
-        $product = AmazonProduct::findOrFail($id);
+        $product = AmazonProduct::where('user_id', auth()->id())->findOrFail($id);
         $product->status = $product->status === 'active' ? 'inactive' : 'active';
         $product->save();
         
@@ -180,7 +192,7 @@ class AmazonProductController extends Controller
 
     public function destroy($id)
     {
-        $product = AmazonProduct::findOrFail($id);
+        $product = AmazonProduct::where('user_id', auth()->id())->findOrFail($id);
         
         // Delete image
         if ($product->image && file_exists(public_path('uploads/amazon/' . $product->image))) {

@@ -9,7 +9,7 @@ class AmazonCategoryController extends Controller
 {
     public function index()
     {
-        $categories = AmazonCategory::latest()->paginate(10);
+        $categories = AmazonCategory::where('user_id', auth()->id())->latest()->paginate(10);
         return view('backend.amazon.categories.index', compact('categories'));
     }
 
@@ -48,7 +48,9 @@ class AmazonCategoryController extends Controller
                     
                     if (!empty($categoryName)) {
                         // Check if category already exists
-                        $existingCategory = AmazonCategory::where('category_name', $categoryName)->first();
+                        $existingCategory = AmazonCategory::where('category_name', $categoryName)
+                            ->where('user_id', auth()->id())
+                            ->first();
                         
                         if (!$existingCategory) {
                             AmazonCategory::create([
@@ -101,13 +103,13 @@ class AmazonCategoryController extends Controller
 
     public function show($id)
     {
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         return view('backend.amazon.categories.show', compact('category'));
     }
 
     public function edit($id)
     {
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         return view('backend.amazon.categories.edit', compact('category'));
     }
 
@@ -119,7 +121,7 @@ class AmazonCategoryController extends Controller
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         $data = $request->except('image');
         $data['status'] = 'active'; // Set default status
         $data['is_show'] = $data['is_show'] ?? 0; // Keep existing is_show or set to 0
@@ -144,7 +146,7 @@ class AmazonCategoryController extends Controller
 
     public function toggleStatus($id)
     {
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         $category->status = $category->status === 'active' ? 'inactive' : 'active';
         $category->save();
         
@@ -157,7 +159,7 @@ class AmazonCategoryController extends Controller
 
     public function toggleIsShow($id)
     {
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         $category->is_show = $category->is_show == 1 ? 0 : 1;
         $category->save();
         
@@ -170,7 +172,7 @@ class AmazonCategoryController extends Controller
 
     public function destroy($id)
     {
-        $category = AmazonCategory::findOrFail($id);
+        $category = AmazonCategory::where('user_id', auth()->id())->findOrFail($id);
         
         // Delete image
         if ($category->image && file_exists(public_path('uploads/amazon/' . $category->image))) {

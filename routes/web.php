@@ -89,6 +89,16 @@ use App\Http\Controllers\AmazonProductController;
         Route::get('settings', [AdminController::class, 'settings'])->name('settings');
         Route::post('setting/update', [AdminController::class, 'settingsUpdate'])->name('settings.update');
 
+        // Role Permissions Management
+        Route::get('role-permissions', [App\Http\Controllers\RolePermissionController::class, 'index'])->name('role-permissions.index');
+        Route::get('role-permissions/create-role', [App\Http\Controllers\RolePermissionController::class, 'createRole'])->name('role-permissions.create-role');
+        Route::post('role-permissions/store-role', [App\Http\Controllers\RolePermissionController::class, 'storeRole'])->name('role-permissions.store-role');
+        Route::get('role-permissions/{roleId}', [App\Http\Controllers\RolePermissionController::class, 'show'])->name('role-permissions.show');
+        Route::get('role-permissions/{roleId}/edit', [App\Http\Controllers\RolePermissionController::class, 'edit'])->name('role-permissions.edit');
+        Route::put('role-permissions/{roleId}', [App\Http\Controllers\RolePermissionController::class, 'update'])->name('role-permissions.update');
+        Route::delete('role-permissions/destroy-role/{roleId}', [App\Http\Controllers\RolePermissionController::class, 'destroyRole'])->name('role-permissions.destroy-role');
+        Route::get('role-permissions/api/permissions/{module}', [App\Http\Controllers\RolePermissionController::class, 'getPermissionsByModule'])->name('role-permissions.api.permissions');
+
         // Notification
         Route::get('/notification/{id}', [NotificationController::class, 'show'])->name('admin.notification');
         Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');
