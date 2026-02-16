@@ -45,7 +45,17 @@
                 </div>
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label for="image">Image</label>
+                        <label for="short_description">Short Description</label>
+                        <textarea name="short_description" id="short_description" class="form-control @error('short_description') is-invalid @enderror" rows="2" placeholder="Enter short description for previews" maxlength="500">{{old('short_description', $product->short_description)}}</textarea>
+                        <small class="form-text text-muted">Brief description for product listings (max 500 characters)</small>
+                        @error('short_description')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="image">Upload Image</label>
                         <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/jpeg,image/jpg,image/png,image/gif">
                         <small class="form-text text-muted">Allowed formats: JPEG, JPG, PNG, GIF (Max size: 2MB). Leave empty to keep current image.</small>
                         @if($product->image)
@@ -56,12 +66,32 @@
                         @enderror
                     </div>
                 </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="image_url">External Image URL</label>
+                        <input type="url" name="image_url" id="image_url" class="form-control @error('image_url') is-invalid @enderror" value="{{old('image_url', $product->image_url)}}" placeholder="Enter external image URL" maxlength="500">
+                        <small class="form-text text-muted">Optional: External image URL instead of upload</small>
+                        @error('image_url')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="link">External Link</label>
                         <input type="url" name="link" id="link" class="form-control @error('link') is-invalid @enderror" value="{{old('link', $product->link)}}" placeholder="Enter external link (e.g., Amazon product URL)" maxlength="500">
                         <small class="form-text text-muted">Optional: Link to external product page</small>
                         @error('link')
+                            <span class="text-danger">{{$message}}</span>
+                        @enderror
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="affiliate_url">Affiliate URL</label>
+                        <input type="url" name="affiliate_url" id="affiliate_url" class="form-control @error('affiliate_url') is-invalid @enderror" value="{{old('affiliate_url', $product->affiliate_url)}}" placeholder="Enter affiliate link URL" maxlength="500">
+                        <small class="form-text text-muted">Optional: Affiliate marketing link</small>
+                        @error('affiliate_url')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>

@@ -39,8 +39,11 @@ class AmazonProductController extends Controller
             'amazon_category_id' => 'required|exists:amazon_categories,id',
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'image_url' => 'nullable|url|max:500',
             'link' => 'nullable|url|max:500',
+            'affiliate_url' => 'nullable|url|max:500',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255'
@@ -149,8 +152,11 @@ class AmazonProductController extends Controller
             'amazon_category_id' => 'required|exists:amazon_categories,id',
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
+            'short_description' => 'nullable|string|max:500',
             'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048',
+            'image_url' => 'nullable|url|max:500',
             'link' => 'nullable|url|max:500',
+            'affiliate_url' => 'nullable|url|max:500',
             'meta_title' => 'nullable|string|max:255',
             'meta_description' => 'nullable|string|max:500',
             'meta_keywords' => 'nullable|string|max:255'

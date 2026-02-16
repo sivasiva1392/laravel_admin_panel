@@ -25,14 +25,6 @@
                 <div class="p-5">
                   <div class="text-center">
                     <h1 class="h4 text-gray-900 mb-4">Welcome Back!</h1>
-                    <div class="mb-4">
-                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="showUserLogin()">
-                          User Login
-                        </button>
-                        <button type="button" class="btn btn-primary btn-sm ml-2" onclick="showAdminLogin()">
-                          Admin Login
-                        </button>
-                    </div>
                   </div>
                   
                   <!-- User Login Form -->
@@ -105,11 +97,11 @@
                   <hr>
                    
                   <div class="text-center">
-                    @if (Route::has('password.request'))
+                    <!-- @if (Route::has('password.request'))
                         <a class="btn btn-link small" href="{{ route('password.request') }}">
                             {{ __('Forgot Your Password?') }}
                         </a>
-                    @endif
+                    @endif -->
                   </div>
                 </div>
               </div>

@@ -53,7 +53,11 @@ use App\Http\Controllers\AmazonProductController;
 
     // Welcome page route
     Route::get('/', function () {
-        return view('welcome');
+        if (auth()->check()) {
+            return redirect()->route('admin');
+        } else {
+            return redirect()->route('login');
+        }
     })->name('home');
 
     // Backend section start

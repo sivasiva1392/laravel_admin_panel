@@ -25,9 +25,11 @@
             <tr>
               <th>S.N.</th>
               <th>Product Name</th>
+              <th>Slug</th>
               <th>Category</th>
+              <th>Short Description</th>
               <th>Image</th>
-              <th>Link</th>
+              <th>Links</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -36,9 +38,11 @@
             <tr>
               <th>S.N.</th>
               <th>Product Name</th>
+              <th>Slug</th>
               <th>Category</th>
+              <th>Short Description</th>
               <th>Image</th>
-              <th>Link</th>
+              <th>Links</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -47,23 +51,46 @@
             @foreach($products as $product)
                 <tr>
                     <td>{{$product->id}}</td>
-                    <td>{{$product->product_name}}</td>
+                    <td>
+                        <strong>{{$product->product_name}}</strong>
+                        @if($product->slug)
+                            <br><small class="text-muted">Slug: {{$product->slug}}</small>
+                        @endif
+                    </td>
+                    <td>{{$product->slug ?? 'N/A'}}</td>
                     <td>{{$product->category->category_name ?? 'N/A'}}</td>
+                    <td>
+                        @if($product->short_description)
+                            <small>{{$product->short_description}}</small>
+                        @else
+                            <span class="text-muted">No short description</span>
+                        @endif
+                    </td>
                     <td>
                         @if($product->image)
                             <img src="{{asset('uploads/amazon/'.$product->image)}}" class="img-fluid zoom" style="max-width:80px" alt="{{$product->product_name}}">
+                        @elseif($product->image_url)
+                            <img src="{{$product->image_url}}" class="img-fluid zoom" style="max-width:80px" alt="{{$product->product_name}}" onerror="this.src='{{asset('backend/img/thumbnail-default.jpg')}}'">
                         @else
                             <img src="{{asset('backend/img/thumbnail-default.jpg')}}" class="img-fluid zoom" style="max-width:80px" alt="No image">
                         @endif
                     </td>
                     <td>
-                        @if($product->link)
-                            <a href="{{$product->link}}" target="_blank" class="btn btn-sm btn-info" title="Visit Link">
-                                <i class="fas fa-external-link-alt"></i>
-                            </a>
-                        @else
-                            <span class="text-muted">No Link</span>
-                        @endif
+                        <div class="btn-group-vertical" role="group">
+                            @if($product->link)
+                                <a href="{{$product->link}}" target="_blank" class="btn btn-sm btn-info mb-1" title="External Link">
+                                    <i class="fas fa-external-link-alt"></i> Link
+                                </a>
+                            @endif
+                            @if($product->affiliate_url)
+                                <a href="{{$product->affiliate_url}}" target="_blank" class="btn btn-sm btn-success mb-1" title="Affiliate Link">
+                                    <i class="fas fa-dollar-sign"></i> Affiliate
+                                </a>
+                            @endif
+                            @if(!$product->link && !$product->affiliate_url)
+                                <span class="text-muted">No Links</span>
+                            @endif
+                        </div>
                     </td>
                     <td>
                         <button class="btn status-toggle-btn" data-id="{{$product->id}}" data-route="{{route('amazon-products.toggle-status', $product->id)}}" data-status="{{$product->status}}">
