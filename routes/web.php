@@ -122,6 +122,18 @@ use App\Http\Controllers\AmazonProductController;
         Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
         Route::post('amazon-categories/{id}/toggle-is-show', [AmazonCategoryController::class, 'toggleIsShow'])->name('amazon-categories.toggle-is-show');
         
+        // Amazon Subcategories
+        Route::get('amazon-subcategories', [AmazonCategoryController::class, 'subCategories'])->name('amazon-subcategories.index');
+        Route::get('amazon-subcategories/create', [AmazonCategoryController::class, 'createSubCategory'])->name('amazon-subcategories.create');
+        Route::post('amazon-subcategories', [AmazonCategoryController::class, 'storeSubCategory'])->name('amazon-subcategories.store');
+        Route::get('amazon-subcategories/{id}/edit', [AmazonCategoryController::class, 'editSubCategory'])->name('amazon-subcategories.edit');
+        Route::put('amazon-subcategories/{id}', [AmazonCategoryController::class, 'updateSubCategory'])->name('amazon-subcategories.update');
+        Route::post('amazon-subcategories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleSubCategoryStatus'])->name('amazon-subcategories.toggle-status');
+        Route::delete('amazon-subcategories/{id}', [AmazonCategoryController::class, 'destroySubCategory'])->name('amazon-subcategories.destroy');
+        
+        // API for dynamic subcategory loading
+        Route::get('api/amazon-categories/{categoryId}/subcategories', [AmazonCategoryController::class, 'getSubCategories'])->name('amazon-categories.subcategories.api');
+        
         Route::resource('amazon-sub-categories', 'AmazonSubCategoryController');
         Route::post('amazon-sub-categories/{id}/toggle-status', [AmazonSubCategoryController::class, 'toggleStatus'])->name('amazon-sub-categories.toggle-status');
         

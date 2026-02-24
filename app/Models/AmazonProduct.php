@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\AmazonCategory;
+use App\Models\AmazonSubCategory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Str;
@@ -25,6 +27,7 @@ class AmazonProduct extends Model
     
     protected $fillable = [
         'amazon_category_id',
+        'amazon_sub_category_id',
         'product_name',
         'slug',
         'description',
@@ -43,6 +46,11 @@ class AmazonProduct extends Model
     public function category()
     {
         return $this->belongsTo(AmazonCategory::class, 'amazon_category_id');
+    }
+    
+    public function subCategory()
+    {
+        return $this->belongsTo(AmazonSubCategory::class, 'amazon_sub_category_id');
     }
     
     public function user()

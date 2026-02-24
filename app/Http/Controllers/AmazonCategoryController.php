@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AmazonCategory;
+use App\Models\AmazonSubCategory;
 use Illuminate\Http\Request;
 
 class AmazonCategoryController extends Controller
@@ -183,5 +184,126 @@ class AmazonCategoryController extends Controller
         
         return redirect()->route('amazon-categories.index')
             ->with('success', 'Category deleted successfully.');
+    }
+
+    // Subcategory management methods
+    public function subCategories()
+    {
+        $subCategories = AmazonSubCategory::with('category')
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->paginate(10);
+        return view('backend.amazon.subcategories.index', compact('subCategories'));
+    }
+
+    public function createSubCategory()
+    {
+        $categories = AmazonCategory::where('user_id', auth()->id())
+            ->where('status', 'active')
+            ->get();
+        return view('backend.amazon.subcategories.create', compact('categories'));
+    }
+
+    public function storeSubCategory(Request $request)
+    {
+        $request->validate([
+            'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'sub_category_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
+        ]);
+
+        $data = $request->except('image');
+        $data['status'] = 'active';
+        
+        if ($request->hasFile('image')) {
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/amazon'), $fileName);
+            $data['image'] = $fileName;
+        }
+
+        AmazonSubCategory::create(array_merge($data, ['user_id' => auth()->id()]));
+        
+        return redirect()->route('amazon-subcategories.index')
+            ->with('success', 'Subcategory created successfully.');
+    }
+
+    public function editSubCategory($id)
+    {
+        $subCategory = AmazonSubCategory::where('user_id', auth()->id())->findOrFail($id);
+        $categories = AmazonCategory::where('user_id', auth()->id())
+            ->where('status', 'active')
+            ->get();
+        return view('backend.amazon.subcategories.edit', compact('subCategory', 'categories'));
+    }
+
+    public function updateSubCategory(Request $request, $id)
+    {
+        $request->validate([
+            'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'sub_category_name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'image' => 'nullable|image|mimes:jpeg,jpg,png,gif|max:2048'
+        ]);
+
+        $subCategory = AmazonSubCategory::where('user_id', auth()->id())->findOrFail($id);
+        $data = $request->except('image');
+        
+        if ($request->hasFile('image')) {
+            // Delete old image
+            if ($subCategory->image && file_exists(public_path('uploads/amazon/' . $subCategory->image))) {
+                unlink(public_path('uploads/amazon/' . $subCategory->image));
+            }
+            
+            $file = $request->file('image');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/amazon'), $fileName);
+            $data['image'] = $fileName;
+        }
+
+        $subCategory->update(array_merge($data, ['user_id' => auth()->id()]));
+        
+        return redirect()->route('amazon-subcategories.index')
+            ->with('success', 'Subcategory updated successfully.');
+    }
+
+    public function toggleSubCategoryStatus($id)
+    {
+        $subCategory = AmazonSubCategory::where('user_id', auth()->id())->findOrFail($id);
+        $subCategory->status = $subCategory->status === 'active' ? 'inactive' : 'active';
+        $subCategory->save();
+        
+        return response()->json([
+            'success' => true,
+            'status' => $subCategory->status,
+            'message' => 'Subcategory status updated successfully.'
+        ]);
+    }
+
+    public function destroySubCategory($id)
+    {
+        $subCategory = AmazonSubCategory::where('user_id', auth()->id())->findOrFail($id);
+        
+        // Delete image
+        if ($subCategory->image && file_exists(public_path('uploads/amazon/' . $subCategory->image))) {
+            unlink(public_path('uploads/amazon/' . $subCategory->image));
+        }
+        
+        $subCategory->delete();
+        
+        return redirect()->route('amazon-subcategories.index')
+            ->with('success', 'Subcategory deleted successfully.');
+    }
+
+    // API endpoint for dynamic subcategory loading
+    public function getSubCategories($categoryId)
+    {
+        $subCategories = AmazonSubCategory::where('amazon_category_id', $categoryId)
+            ->where('status', 'active')
+            ->where('user_id', auth()->id())
+            ->get(['id', 'sub_category_name']);
+            
+        return response()->json($subCategories);
     }
 }

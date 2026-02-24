@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\AmazonProduct;
 use App\Models\AmazonCategory;
+use App\Models\AmazonSubCategory;
 use Illuminate\Http\Request;
 
 class AmazonProductController extends Controller
 {
     public function index()
     {
-        $products = AmazonProduct::with('category')
+        $products = AmazonProduct::with(['category', 'subCategory'])
             ->where('user_id', auth()->id())
             ->latest()
             ->paginate(10);
@@ -21,22 +22,23 @@ class AmazonProductController extends Controller
     {
         $categories = AmazonCategory::where('status', 'active')
             ->where('user_id', auth()->id())
-            ->pluck('category_name', 'id');
-        return view('backend.amazon.products.create', compact('categories'));
+            ->get();
+        return view('backend.amazon.products.create_with_dynamic', compact('categories'));
     }
 
     public function import()
     {
         $categories = AmazonCategory::where('status', 'active')
             ->where('user_id', auth()->id())
-            ->pluck('category_name', 'id');
-        return view('backend.amazon.products.import', compact('categories'));
+            ->get();
+        return view('backend.amazon.products.import_with_dynamic', compact('categories'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'amazon_sub_category_id' => 'nullable|exists:amazon_sub_categories,id',
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'short_description' => 'nullable|string|max:500',
@@ -68,12 +70,14 @@ class AmazonProductController extends Controller
     {
         $request->validate([
             'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'amazon_sub_category_id' => 'nullable|exists:amazon_sub_categories,id',
             'csv_file' => 'required|file|mimes:csv,txt|max:10240'
         ]);
 
         $file = $request->file('csv_file');
         $path = $file->getRealPath();
         $categoryId = $request->amazon_category_id;
+        $subCategoryId = $request->amazon_sub_category_id;
         
         $imported = 0;
         $skipped = 0;
@@ -94,15 +98,19 @@ class AmazonProductController extends Controller
                     $status = trim($row[6] ?? 'active');
                     
                     if (!empty($productName)) {
-                        // Check if product already exists in the same category
+                        // Check if product already exists in the same category/subcategory
                         $existingProduct = AmazonProduct::where('product_name', $productName)
                             ->where('amazon_category_id', $categoryId)
+                            ->when($subCategoryId, function($query, $subCategoryId) {
+                                return $query->where('amazon_sub_category_id', $subCategoryId);
+                            })
                             ->where('user_id', auth()->id())
                             ->first();
                         
                         if (!$existingProduct) {
                             AmazonProduct::create([
                                 'amazon_category_id' => $categoryId,
+                                'amazon_sub_category_id' => $subCategoryId,
                                 'product_name' => $productName,
                                 'description' => $description,
                                 'link' => $link,
@@ -131,7 +139,7 @@ class AmazonProductController extends Controller
 
     public function show($id)
     {
-        $product = AmazonProduct::with('category')
+        $product = AmazonProduct::with(['category', 'subCategory'])
             ->where('user_id', auth()->id())
             ->findOrFail($id);
         return view('backend.amazon.products.show', compact('product'));
@@ -142,14 +150,19 @@ class AmazonProductController extends Controller
         $product = AmazonProduct::where('user_id', auth()->id())->findOrFail($id);
         $categories = AmazonCategory::where('status', 'active')
             ->where('user_id', auth()->id())
-            ->pluck('category_name', 'id');
-        return view('backend.amazon.products.edit', compact('product', 'categories'));
+            ->get();
+        $subCategories = $product->amazon_category_id ? 
+            AmazonSubCategory::where('amazon_category_id', $product->amazon_category_id)
+                ->where('status', 'active')
+                ->get() : [];
+        return view('backend.amazon.products.edit_with_dynamic', compact('product', 'categories', 'subCategories'));
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
             'amazon_category_id' => 'required|exists:amazon_categories,id',
+            'amazon_sub_category_id' => 'nullable|exists:amazon_sub_categories,id',
             'product_name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'short_description' => 'nullable|string|max:500',
