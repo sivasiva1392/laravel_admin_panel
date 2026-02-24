@@ -81,6 +81,68 @@
    </li>
    @endif
 
+
+   <!-- Divider -->
+   @if(auth()->user()->canAccessModule('categories') || auth()->user()->canAccessModule('brands') || auth()->user()->canAccessModule('products') || auth()->user()->role_id == 1)
+   <hr class="sidebar-divider">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      Shop
+   </div>
+   @endif
+   <!-- Categories -->
+   @if(auth()->user()->canAccessModule('categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/category') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('category.index')}}">
+      <i class="fas fa-sitemap"></i>
+      <span>Category</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('brands') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/brand') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('brand.index')}}">
+      <i class="fas fa-table"></i>
+      <span>Brands</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('products') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/product') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('product.index')}}">
+      <i class="fas fa-cubes"></i>
+      <span>Products</span></a>
+   </li>
+   @endif
+   <!-- Divider -->
+   @if(auth()->user()->canAccessModule('posts') || auth()->user()->canAccessModule('post_categories') || auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
+   <hr class="sidebar-divider">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      Posts
+   </div>
+   @endif
+   @if(auth()->user()->canAccessModule('posts') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post') && !Str::startsWith(request()->path(), 'admin/post-category') && !Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post.index')}}">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Posts</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-category') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post-category.index')}}">
+      <i class="fas fa-folder"></i>
+      <span>Category</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post-tag.index')}}">
+      <i class="fas fa-tags"></i>
+      <span>Tags</span></a>
+   </li>
+   @endif
+  
+   
    <!-- Divider -->
    @if(auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
@@ -88,6 +150,13 @@
    <div class="sidebar-heading">
       General Settings
    </div>
+   @endif
+   @if(auth()->user()->canAccessModule('coupons') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/coupon') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('coupon.index')}}">
+      <i class="fas fa-table"></i>
+      <span>Coupon</span></a>
+   </li>
    @endif
    @if(auth()->user()->canAccessModule('users') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/users') ? 'active' : '' }}">
