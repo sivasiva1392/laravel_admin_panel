@@ -119,12 +119,15 @@ use App\Http\Controllers\AmazonProductController;
         Route::get('amazon-categories/import', [AmazonCategoryController::class, 'import'])->name('amazon-categories.import');
         Route::post('amazon-categories/import', [AmazonCategoryController::class, 'importStore'])->name('amazon-categories.import.store');
         Route::resource('amazon-categories', 'AmazonCategoryController');
+        Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
+        Route::post('amazon-categories/{id}/toggle-is-show', [AmazonCategoryController::class, 'toggleIsShow'])->name('amazon-categories.toggle-is-show');
+        
+        Route::resource('amazon-sub-categories', 'AmazonSubCategoryController');
+        Route::post('amazon-sub-categories/{id}/toggle-status', [AmazonSubCategoryController::class, 'toggleStatus'])->name('amazon-sub-categories.toggle-status');
         
         Route::get('amazon-products/import', [AmazonProductController::class, 'import'])->name('amazon-products.import');
         Route::post('amazon-products/import', [AmazonProductController::class, 'importStore'])->name('amazon-products.import.store');
         Route::resource('amazon-products', 'AmazonProductController');
-        Route::post('amazon-categories/{id}/toggle-status', [AmazonCategoryController::class, 'toggleStatus'])->name('amazon-categories.toggle-status');
-        Route::post('amazon-categories/{id}/toggle-is-show', [AmazonCategoryController::class, 'toggleIsShow'])->name('amazon-categories.toggle-is-show');
         Route::post('amazon-products/{id}/toggle-status', [AmazonProductController::class, 'toggleStatus'])->name('amazon-products.toggle-status');
     });
 

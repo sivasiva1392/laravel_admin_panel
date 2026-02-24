@@ -38,6 +38,11 @@ class AmazonCategory extends Model
         return $this->hasMany(AmazonProduct::class);
     }
     
+    public function subCategories()
+    {
+        return $this->hasMany(AmazonSubCategory::class, 'amazon_category_id');
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);

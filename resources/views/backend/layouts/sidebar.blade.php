@@ -47,6 +47,14 @@
       <span>Amazon Categories</span></a>
    </li>
    @endif
+   <!-- Amazon Sub-Categories -->
+   @if(auth()->user()->canAccessModule('amazon_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/amazon-sub-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('amazon-sub-categories.index')}}">
+      <i class="fas fa-folder"></i>
+      <span>Amazon Sub-Categories</span></a>
+   </li>
+   @endif
    <!-- Amazon Products -->
    @if(auth()->user()->canAccessModule('amazon_products') || auth()->user()->role_id == 1)
    <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/amazon-products') && !Str::startsWith(request()->path(), 'admin/amazon-categories') ? 'active' : '' }}">
