@@ -89,6 +89,36 @@
    </li>
    @endif
 
+
+      @if(auth()->user()->canAccessModule('posts') || auth()->user()->canAccessModule('post_categories') || auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
+   <hr class="sidebar-divider">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      Posts
+   </div>
+   @endif
+   @if(auth()->user()->canAccessModule('posts') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post') && !Str::startsWith(request()->path(), 'admin/post-category') && !Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post.index')}}">
+      <i class="fas fa-fw fa-folder"></i>
+      <span>Posts</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-category') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post-category.index')}}">
+      <i class="fas fa-folder"></i>
+      <span>Category</span></a>
+   </li>
+   @endif
+   @if(auth()->user()->canAccessModule('post_tags') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/post-tag') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('post-tag.index')}}">
+      <i class="fas fa-tags"></i>
+      <span>Tags</span></a>
+   </li>
+   @endif
+
    <!-- Divider -->
    @if(auth()->user()->canAccessModule('users') || auth()->user()->canAccessModule('settings') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">
