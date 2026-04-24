@@ -63,6 +63,24 @@ class PermissionsTableSeeder extends Seeder
             ['name' => 'create_amazon_subcategories', 'display_name' => 'Create Amazon Subcategories', 'module' => 'amazon_subcategories'],
             ['name' => 'edit_amazon_subcategories', 'display_name' => 'Edit Amazon Subcategories', 'module' => 'amazon_subcategories'],
             ['name' => 'delete_amazon_subcategories', 'display_name' => 'Delete Amazon Subcategories', 'module' => 'amazon_subcategories'],
+            
+            // Blog Category permissions
+            ['name' => 'view_blog_categories', 'display_name' => 'View Blog Categories', 'module' => 'blog_categories'],
+            ['name' => 'create_blog_categories', 'display_name' => 'Create Blog Categories', 'module' => 'blog_categories'],
+            ['name' => 'edit_blog_categories', 'display_name' => 'Edit Blog Categories', 'module' => 'blog_categories'],
+            ['name' => 'delete_blog_categories', 'display_name' => 'Delete Blog Categories', 'module' => 'blog_categories'],
+            
+            // Blog Subcategory permissions
+            ['name' => 'view_blog_subcategories', 'display_name' => 'View Blog Subcategories', 'module' => 'blog_subcategories'],
+            ['name' => 'create_blog_subcategories', 'display_name' => 'Create Blog Subcategories', 'module' => 'blog_subcategories'],
+            ['name' => 'edit_blog_subcategories', 'display_name' => 'Edit Blog Subcategories', 'module' => 'blog_subcategories'],
+            ['name' => 'delete_blog_subcategories', 'display_name' => 'Delete Blog Subcategories', 'module' => 'blog_subcategories'],
+            
+            // Blog Product permissions
+            ['name' => 'view_blog_products', 'display_name' => 'View Blog Products', 'module' => 'blog_products'],
+            ['name' => 'create_blog_products', 'display_name' => 'Create Blog Products', 'module' => 'blog_products'],
+            ['name' => 'edit_blog_products', 'display_name' => 'Edit Blog Products', 'module' => 'blog_products'],
+            ['name' => 'delete_blog_products', 'display_name' => 'Delete Blog Products', 'module' => 'blog_products'],
         ];
 
         foreach ($permissions as $permission) {

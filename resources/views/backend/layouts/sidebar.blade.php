@@ -50,6 +50,39 @@
    </li>
    @endif
 
+   <!-- Divider -->
+   @if(auth()->user()->canAccessModule('blog_categories') || auth()->user()->canAccessModule('blog_products') || auth()->user()->role_id == 1)
+   <hr class="sidebar-divider d-none d-md-block">
+   <!-- Heading -->
+   <div class="sidebar-heading">
+      Blog
+   </div>
+   @endif
+   <!-- Blog Categories -->
+   @if(auth()->user()->canAccessModule('blog_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/blog-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('blog-categories.index')}}">
+      <i class="fas fa-folder-open"></i>
+      <span>Blog Categories</span></a>
+   </li>
+   @endif
+   <!-- Blog Sub-Categories -->
+   @if(auth()->user()->canAccessModule('blog_categories') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/blog-sub-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('blog-sub-categories.index')}}">
+      <i class="fas fa-folder"></i>
+      <span>Blog Sub-Categories</span></a>
+   </li>
+   @endif
+   <!-- Blog Products -->
+   @if(auth()->user()->canAccessModule('blog_products') || auth()->user()->role_id == 1)
+   <li class="nav-item {{ Str::startsWith(request()->path(), 'admin/blog-products') && !Str::startsWith(request()->path(), 'admin/blog-categories') ? 'active' : '' }}">
+      <a class="nav-link" href="{{route('blog-products.index')}}">
+      <i class="fas fa-box"></i>
+      <span>Blog Products</span></a>
+   </li>
+   @endif
+
     <!-- Divider -->
    @if(auth()->user()->canAccessModule('lms_categories') || auth()->user()->canAccessModule('lms') || auth()->user()->role_id == 1)
    <hr class="sidebar-divider d-none d-md-block">

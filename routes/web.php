@@ -15,6 +15,9 @@
 use App\Http\Controllers\LmsCategoryController;
 use App\Http\Controllers\AmazonCategoryController;
 use App\Http\Controllers\AmazonProductController;
+use App\Http\Controllers\BlogCategoryController;
+use App\Http\Controllers\BlogSubCategoryController;
+use App\Http\Controllers\BlogProductController;
     /*
     |--------------------------------------------------------------------------
     | Web Routes
@@ -116,6 +119,33 @@ use App\Http\Controllers\AmazonProductController;
         Route::post('amazon-products/import', [AmazonProductController::class, 'importStore'])->name('amazon-products.import.store');
         Route::resource('amazon-products', 'AmazonProductController');
         Route::post('amazon-products/{id}/toggle-status', [AmazonProductController::class, 'toggleStatus'])->name('amazon-products.toggle-status');
+        
+        // Blog Module
+        Route::get('blog-categories/import', [BlogCategoryController::class, 'import'])->name('blog-categories.import');
+        Route::post('blog-categories/import', [BlogCategoryController::class, 'importStore'])->name('blog-categories.import.store');
+        Route::resource('blog-categories', 'BlogCategoryController');
+        Route::post('blog-categories/{id}/toggle-status', [BlogCategoryController::class, 'toggleStatus'])->name('blog-categories.toggle-status');
+        Route::post('blog-categories/{id}/toggle-is-show', [BlogCategoryController::class, 'toggleIsShow'])->name('blog-categories.toggle-is-show');
+        
+        // Blog Subcategories
+        Route::get('blog-subcategories', [BlogCategoryController::class, 'subCategories'])->name('blog-subcategories.index');
+        Route::get('blog-subcategories/create', [BlogCategoryController::class, 'createSubCategory'])->name('blog-subcategories.create');
+        Route::post('blog-subcategories', [BlogCategoryController::class, 'storeSubCategory'])->name('blog-subcategories.store');
+        Route::get('blog-subcategories/{id}/edit', [BlogCategoryController::class, 'editSubCategory'])->name('blog-subcategories.edit');
+        Route::put('blog-subcategories/{id}', [BlogCategoryController::class, 'updateSubCategory'])->name('blog-subcategories.update');
+        Route::post('blog-subcategories/{id}/toggle-status', [BlogCategoryController::class, 'toggleSubCategoryStatus'])->name('blog-subcategories.toggle-status');
+        Route::delete('blog-subcategories/{id}', [BlogCategoryController::class, 'destroySubCategory'])->name('blog-subcategories.destroy');
+        
+        // API for dynamic subcategory loading
+        Route::get('api/blog-categories/{categoryId}/subcategories', [BlogCategoryController::class, 'getSubCategories'])->name('blog-categories.subcategories.api');
+        
+        Route::resource('blog-sub-categories', 'BlogSubCategoryController');
+        Route::post('blog-sub-categories/{id}/toggle-status', [BlogSubCategoryController::class, 'toggleStatus'])->name('blog-sub-categories.toggle-status');
+        
+        Route::get('blog-products/import', [BlogProductController::class, 'import'])->name('blog-products.import');
+        Route::post('blog-products/import', [BlogProductController::class, 'importStore'])->name('blog-products.import.store');
+        Route::resource('blog-products', 'BlogProductController');
+        Route::post('blog-products/{id}/toggle-status', [BlogProductController::class, 'toggleStatus'])->name('blog-products.toggle-status');
     });
 
     // User section start - for non-admin users

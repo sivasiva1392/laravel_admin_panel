@@ -29,7 +29,7 @@ class RolePermissionsTableSeeder extends Seeder
             }
         }
         
-        // Admin gets limited permissions (example: can manage LMS and Amazon modules)
+        // Admin gets limited permissions (example: can manage LMS, Amazon and Blog modules)
         if ($adminRole) {
             $adminPermissions = [
                 'view_dashboard',
@@ -39,6 +39,9 @@ class RolePermissionsTableSeeder extends Seeder
                 'view_amazon_categories', 'create_amazon_categories', 'edit_amazon_categories', 'delete_amazon_categories',
                 'view_amazon_subcategories', 'create_amazon_subcategories', 'edit_amazon_subcategories', 'delete_amazon_subcategories',
                 'view_amazon_products', 'create_amazon_products', 'edit_amazon_products', 'delete_amazon_products',
+                'view_blog_categories', 'create_blog_categories', 'edit_blog_categories', 'delete_blog_categories',
+                'view_blog_subcategories', 'create_blog_subcategories', 'edit_blog_subcategories', 'delete_blog_subcategories',
+                'view_blog_products', 'create_blog_products', 'edit_blog_products', 'delete_blog_products',
             ];
             
             foreach ($adminPermissions as $permissionName) {
