@@ -16,54 +16,122 @@ class AdminController extends Controller
 {
     public function index()
     {
-        // User registration chart data (last 7 days)
-        $data = User::select(
-            DB::raw("COUNT(*) as count"),
-            DB::raw("DAYNAME(created_at) as day_name"),
-            DB::raw("DAY(created_at) as day")
-        )
-        ->where('created_at', '>', Carbon::today()->subDay(6))
-        ->groupBy('day_name', 'day')
-        ->orderBy('day')
-        ->get();
+        $user = auth()->user();
+        $isSuperAdmin = $user->role_id == 1 || $user->role->name == 'super_admin';
+        $isAdmin = $user->role_id == 2 || $user->role->name == 'admin';
         
-        $array[] = ['Name', 'Number'];
-        foreach ($data as $key => $value) {
-            $array[++$key] = [$value->day_name, $value->count];
+        if ($isSuperAdmin) {
+            // Super Admin gets full dashboard data
+            // User registration chart data (last 7 days)
+            $data = User::select(
+                DB::raw("COUNT(*) as count"),
+                DB::raw("DAYNAME(created_at) as day_name"),
+                DB::raw("DAY(created_at) as day")
+            )
+            ->where('created_at', '>', Carbon::today()->subDay(6))
+            ->groupBy('day_name', 'day')
+            ->orderBy('day')
+            ->get();
+            
+            $array[] = ['Name', 'Number'];
+            foreach ($data as $key => $value) {
+                $array[++$key] = [$value->day_name, $value->count];
+            }
+            
+            // Get recent users for dashboard
+            $recentUsers = User::with('role')
+                ->orderBy('created_at', 'desc')
+                ->take(5)
+                ->get();
+            
+            // Enhanced user statistics
+            $userStats = [
+                'total_users' => User::count(),
+                'active_users' => User::where('status', 'active')->count(),
+                'inactive_users' => User::where('status', 'inactive')->count(),
+                'admin_users' => User::where('role_id', 1)->count(),
+                'user_users' => User::where('role_id', 3)->count(),
+                'this_month_users' => User::whereMonth('created_at', Carbon::now()->month)
+                                            ->whereYear('created_at', Carbon::now()->year)
+                                            ->count(),
+                'last_month_users' => User::whereMonth('created_at', Carbon::now()->subMonth()->month)
+                                            ->whereYear('created_at', Carbon::now()->subMonth()->year)
+                                            ->count(),
+            ];
+            
+            // User role distribution
+            $roleDistribution = User::join('roles', 'users.role_id', '=', 'roles.id')
+                ->select('roles.display_name as role', DB::raw('count(*) as count'))
+                ->groupBy('roles.display_name')
+                ->get();
+                
+            // Module statistics for Super Admin
+            $moduleStats = [
+                'amazon_categories' => \App\Models\AmazonCategory::count(),
+                'amazon_products' => \App\Models\AmazonProduct::count(),
+                'blog_categories' => \App\Models\BlogCategory::count(),
+                'blog_products' => \App\Models\BlogProduct::count(),
+                'lms_categories' => \App\Models\LmsCategory::count(),
+                'lms_documents' => \App\Models\Lms::count(),
+            ];
+            
+            return view('backend.index')
+                ->with('users', json_encode($array))
+                ->with('recentUsers', $recentUsers)
+                ->with('userStats', $userStats)
+                ->with('roleDistribution', $roleDistribution)
+                ->with('moduleStats', $moduleStats)
+                ->with('userRole', 'super_admin');
+                
+        } else {
+            // Admin gets limited dashboard based on permissions
+            $dashboardData = [];
+            
+            // Check permissions and collect relevant data
+            if ($user->canAccessModule('users') || $isAdmin) {
+                $userStats = [
+                    'total_users' => User::count(),
+                    'active_users' => User::where('status', 'active')->count(),
+                    'inactive_users' => User::where('status', 'inactive')->count(),
+                    'this_month_users' => User::whereMonth('created_at', Carbon::now()->month)
+                                                ->whereYear('created_at', Carbon::now()->year)
+                                                ->count(),
+                ];
+                $dashboardData['userStats'] = $userStats;
+            }
+            
+            if ($user->canAccessModule('amazon_categories')) {
+                $dashboardData['amazon_categories'] = \App\Models\AmazonCategory::count();
+            }
+            
+            if ($user->canAccessModule('amazon_products')) {
+                $dashboardData['amazon_products'] = \App\Models\AmazonProduct::count();
+            }
+            
+            if ($user->canAccessModule('blog_categories')) {
+                $dashboardData['blog_categories'] = \App\Models\BlogCategory::count();
+            }
+            
+            if ($user->canAccessModule('blog_products')) {
+                $dashboardData['blog_products'] = \App\Models\BlogProduct::count();
+            }
+            
+            if ($user->canAccessModule('lms_categories')) {
+                $dashboardData['lms_categories'] = \App\Models\LmsCategory::count();
+            }
+            
+            if ($user->canAccessModule('lms')) {
+                $dashboardData['lms_documents'] = \App\Models\Lms::count();
+            }
+            
+            // For Admin users, create empty chart data to avoid JavaScript errors
+            $emptyChartData = json_encode([['Name', 'Number'], ['No Data', 0]]);
+            
+            return view('backend.index')
+                ->with('dashboardData', $dashboardData)
+                ->with('userRole', 'admin')
+                ->with('users', $emptyChartData);
         }
-        
-        // Get recent users for dashboard
-        $recentUsers = User::with('role')
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
-        
-        // Enhanced user statistics
-        $userStats = [
-            'total_users' => User::count(),
-            'active_users' => User::where('status', 'active')->count(),
-            'inactive_users' => User::where('status', 'inactive')->count(),
-            'admin_users' => User::where('role_id', 1)->count(),
-            'user_users' => User::where('role_id', 3)->count(),
-            'this_month_users' => User::whereMonth('created_at', Carbon::now()->month)
-                                        ->whereYear('created_at', Carbon::now()->year)
-                                        ->count(),
-            'last_month_users' => User::whereMonth('created_at', Carbon::now()->subMonth()->month)
-                                        ->whereYear('created_at', Carbon::now()->subMonth()->year)
-                                        ->count(),
-        ];
-        
-        // User role distribution
-        $roleDistribution = User::join('roles', 'users.role_id', '=', 'roles.id')
-            ->select('roles.display_name as role', DB::raw('count(*) as count'))
-            ->groupBy('roles.display_name')
-            ->get();
-        
-        return view('backend.index')
-            ->with('users', json_encode($array))
-            ->with('recentUsers', $recentUsers)
-            ->with('userStats', $userStats)
-            ->with('roleDistribution', $roleDistribution);
     }
 
     public function profile()

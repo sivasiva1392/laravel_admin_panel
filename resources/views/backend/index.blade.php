@@ -5,11 +5,19 @@
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
       <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      <div class="text-muted">
+        @if($userRole == 'super_admin')
+          <span class="badge badge-danger">Super Admin</span>
+        @else
+          <span class="badge badge-warning">Admin</span>
+        @endif
+      </div>
     </div>
 
     <!-- Content Row -->
+    @if($userRole == 'super_admin')
+    <!-- Super Admin Dashboard -->
     <div class="row">
-
       <!-- Total Users -->
       <div class="col-xl-3 col-md-6 mb-4">
         <div class="card border-left-primary shadow h-100 py-2">
@@ -83,6 +91,292 @@
       </div>
     </div>
 
+    <!-- Module Statistics for Super Admin -->
+    <div class="row">
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Amazon Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['amazon_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-folder-open fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Amazon Products</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['amazon_products'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-box fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Blog Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['blog_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-folder fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Blog Products</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['blog_products'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">LMS Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['lms_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-book fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-2 col-md-4 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">LMS Documents</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$moduleStats['lms_documents'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-file fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    @else
+    <!-- Admin Dashboard (Limited) -->
+    <div class="row">
+      @if(isset($dashboardData['userStats']))
+      <!-- User Statistics -->
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['userStats']['total_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">Registered users</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-users fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Active Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['userStats']['active_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">Currently active</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user-check fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">This Month</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['userStats']['this_month_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">New registrations</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-calendar fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Inactive Users</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['userStats']['inactive_users'] ?? 0}}</div>
+                <div class="text-xs text-muted">Inactive accounts</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user-times fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      <!-- Module Statistics based on permissions -->
+      @if(isset($dashboardData['amazon_categories']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Amazon Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['amazon_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-folder-open fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      @if(isset($dashboardData['amazon_products']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Amazon Products</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['amazon_products'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-box fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      @if(isset($dashboardData['blog_categories']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Blog Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['blog_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-folder fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      @if(isset($dashboardData['blog_products']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Blog Products</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['blog_products'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-file-alt fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      @if(isset($dashboardData['lms_categories']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-danger shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">LMS Categories</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['lms_categories'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-book fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+
+      @if(isset($dashboardData['lms_documents']))
+      <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-secondary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-secondary text-uppercase mb-1">LMS Documents</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{$dashboardData['lms_documents'] ?? 0}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-file fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      @endif
+    </div>
+    @endif
+
+    @if($userRole == 'super_admin')
+    <!-- Super Admin gets full dashboard sections -->
     <div class="row">
       <!-- Area Chart -->
       <div class="col-xl-8 col-lg-7">
@@ -293,12 +587,107 @@
         </div>
       </div>
     </div>
+@else
+    <!-- Admin gets limited dashboard sections -->
+    <div class="row">
+      <div class="col-xl-12">
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Your Dashboard Overview</h6>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12">
+                <h5 class="text-gray-800 mb-3">Welcome to your Admin Dashboard</h5>
+                <p class="text-muted mb-4">You have access to manage the following modules based on your permissions:</p>
+                
+                <div class="row">
+                  @if(isset($dashboardData['userStats']))
+                  <div class="col-md-4 mb-3">
+                    <div class="card border-left-primary shadow h-100 py-2">
+                      <div class="card-body">
+                        <h6 class="text-primary">User Management</h6>
+                        <p class="text-muted small">Manage system users and their permissions</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          <span class="badge badge-primary">Total: {{$dashboardData['userStats']['total_users'] ?? 0}}</span>
+                          <span class="badge badge-success">Active: {{$dashboardData['userStats']['active_users'] ?? 0}}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if(isset($dashboardData['amazon_categories']) || isset($dashboardData['amazon_products']))
+                  <div class="col-md-4 mb-3">
+                    <div class="card border-left-success shadow h-100 py-2">
+                      <div class="card-body">
+                        <h6 class="text-success">Amazon Module</h6>
+                        <p class="text-muted small">Manage Amazon categories and products</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          @if(isset($dashboardData['amazon_categories']))
+                          <span class="badge badge-info">Categories: {{$dashboardData['amazon_categories'] ?? 0}}</span>
+                          @endif
+                          @if(isset($dashboardData['amazon_products']))
+                          <span class="badge badge-warning">Products: {{$dashboardData['amazon_products'] ?? 0}}</span>
+                          @endif
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if(isset($dashboardData['blog_categories']) || isset($dashboardData['blog_products']))
+                  <div class="col-md-4 mb-3">
+                    <div class="card border-left-info shadow h-100 py-2">
+                      <div class="card-body">
+                        <h6 class="text-info">Blog Module</h6>
+                        <p class="text-muted small">Manage blog categories and products</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          @if(isset($dashboardData['blog_categories']))
+                          <span class="badge badge-primary">Categories: {{$dashboardData['blog_categories'] ?? 0}}</span>
+                          @endif
+                          @if(isset($dashboardData['blog_products']))
+                          <span class="badge badge-secondary">Products: {{$dashboardData['blog_products'] ?? 0}}</span>
+                          @endif
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @endif
+                  
+                  @if(isset($dashboardData['lms_categories']) || isset($dashboardData['lms_documents']))
+                  <div class="col-md-4 mb-3">
+                    <div class="card border-left-danger shadow h-100 py-2">
+                      <div class="card-body">
+                        <h6 class="text-danger">LMS Module</h6>
+                        <p class="text-muted small">Manage LMS categories and documents</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                          @if(isset($dashboardData['lms_categories']))
+                          <span class="badge badge-warning">Categories: {{$dashboardData['lms_categories'] ?? 0}}</span>
+                          @endif
+                          @if(isset($dashboardData['lms_documents']))
+                          <span class="badge badge-info">Documents: {{$dashboardData['lms_documents'] ?? 0}}</span>
+                          @endif
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  @endif
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+@endif
     <!-- Content Row -->
     
   </div>
 @endsection
 
 @push('scripts')
+@if($userRole == 'super_admin')
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 {{-- pie chart --}}
@@ -318,6 +707,7 @@
       chart.draw(data, options);
   }
 </script>
+@endif
   {{-- line chart --}}
   {{-- <script type="text/javascript">
     // const url = "{{route('product.order.income')}}";
