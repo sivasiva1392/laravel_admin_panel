@@ -29,21 +29,15 @@ class RolePermissionsTableSeeder extends Seeder
             }
         }
         
-        // Admin gets limited permissions (example: can manage products, categories, brands, but not users or settings)
+        // Admin gets limited permissions (example: can manage LMS and Amazon modules)
         if ($adminRole) {
             $adminPermissions = [
                 'view_dashboard',
-                'view_products', 'create_products', 'edit_products', 'delete_products',
-                'view_categories', 'create_categories', 'edit_categories', 'delete_categories',
-                'view_brands', 'create_brands', 'edit_brands', 'delete_brands',
                 'view_banners', 'create_banners', 'edit_banners', 'delete_banners',
-                'view_posts', 'create_posts', 'edit_posts', 'delete_posts',
-                'view_post_categories', 'create_post_categories', 'edit_post_categories', 'delete_post_categories',
-                'view_post_tags', 'create_post_tags', 'edit_post_tags', 'delete_post_tags',
-                'view_coupons', 'create_coupons', 'edit_coupons', 'delete_coupons',
                 'view_lms_categories', 'create_lms_categories', 'edit_lms_categories', 'delete_lms_categories',
                 'view_lms', 'create_lms', 'edit_lms', 'delete_lms',
                 'view_amazon_categories', 'create_amazon_categories', 'edit_amazon_categories', 'delete_amazon_categories',
+                'view_amazon_subcategories', 'create_amazon_subcategories', 'edit_amazon_subcategories', 'delete_amazon_subcategories',
                 'view_amazon_products', 'create_amazon_products', 'edit_amazon_products', 'delete_amazon_products',
             ];
             

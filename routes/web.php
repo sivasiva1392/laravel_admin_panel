@@ -65,30 +65,9 @@ use App\Http\Controllers\AmazonProductController;
         Route::get('/', [AdminController::class, 'index'])->name('admin');
         // user route
         Route::resource('users', 'UsersController');
-        // Banner
-        Route::resource('banner', 'BannerController');
-        // Brand
-        Route::resource('brand', 'BrandController');
         // Profile
         Route::get('/profile', [AdminController::class, 'profile'])->name('admin-profile');
         Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('profile-update');
-        // Category
-        Route::resource('/category', 'CategoryController');
-        // Product
-        Route::resource('/product', 'ProductController');
-        // Ajax for sub category
-        Route::post('/category/{id}/child', 'CategoryController@getChildByParent');
-        // POST category
-        Route::resource('/post-category', 'PostCategoryController');
-        // Post tag
-        Route::resource('/post-tag', 'PostTagController');
-        // Post
-        Route::resource('/post', 'PostController');
-        // Message
-        Route::resource('/message', 'MessageController');
-        Route::get('/message/five', [MessageController::class, 'messageFive'])->name('messages.five');
-        // Coupon
-        Route::resource('/coupon', 'CouponController');
         // Settings
         Route::get('settings', [AdminController::class, 'settings'])->name('settings');
         Route::post('setting/update', [AdminController::class, 'settingsUpdate'])->name('settings.update');
@@ -103,11 +82,7 @@ use App\Http\Controllers\AmazonProductController;
         Route::delete('role-permissions/destroy-role/{roleId}', [App\Http\Controllers\RolePermissionController::class, 'destroyRole'])->name('role-permissions.destroy-role');
         Route::get('role-permissions/api/permissions/{module}', [App\Http\Controllers\RolePermissionController::class, 'getPermissionsByModule'])->name('role-permissions.api.permissions');
 
-        // Notification
-        Route::get('/notification/{id}', [NotificationController::class, 'show'])->name('admin.notification');
-        Route::get('/notifications', [NotificationController::class, 'index'])->name('all.notification');
-        Route::delete('/notification/{id}', [NotificationController::class, 'delete'])->name('notification.delete');
-        // Password Change
+                // Password Change
         Route::get('change-password', [AdminController::class, 'changePassword'])->name('change.password.form');
         Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('change.password');
         
@@ -149,17 +124,7 @@ use App\Http\Controllers\AmazonProductController;
         // Profile
         Route::get('/profile', [AdminController::class, 'profile'])->name('user-profile');
         Route::post('/profile/{id}', [AdminController::class, 'profileUpdate'])->name('user-profile-update');
-        // Category
-        Route::resource('/category', 'CategoryController');
-        // Product
-        Route::resource('/product', 'ProductController');
-        // Post category
-        Route::resource('/post-category', 'PostCategoryController');
-        // Post tag
-        Route::resource('/post-tag', 'PostTagController');
-        // Post
-        Route::resource('/post', 'PostController');
-        // Password Change
+                        // Password Change
         Route::get('change-password', [AdminController::class, 'changePassword'])->name('user.change.password.form');
         Route::post('change-password', [AdminController::class, 'changPasswordStore'])->name('user.change.password');
     });

@@ -3,7 +3,6 @@
 <div class="card">
   <div class="row">
     <div class="col-md-12">
-       @include('backend.layouts.notification')
     </div>
   </div>
   <h5 class="card-header">Messages</h5>

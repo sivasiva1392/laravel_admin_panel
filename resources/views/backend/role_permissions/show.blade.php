@@ -2,7 +2,6 @@
 @section('title','Role Permissions - {{ $role->display_name }}')
 @section('main-content')
 <div class="container-fluid">
-    @include('backend.layouts.notification')
     
     <!-- Page Heading -->
     <div class="d-sm-flex align-items-center justify-content-between mb-4">
